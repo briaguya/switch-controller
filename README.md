@@ -34,6 +34,11 @@ Lets you control a switch from your Linux Box
 	pip install evdev
 	```
 * Edit `controller/gamepad-control-relay.py` to match your input and serial devices, as well as to match the bindings of your controller.  Included bindings are for a wired PS3 Dualshock 3.
+* Connect the Switch Control board flashed with `Joystick.hex` to the Switch and the USB to Serial converter to the Linux PC.
+* Connect the the USB to Serial converter to the Switch Control board
+	* Example wiring diagram using a second Arduino as a USB to Serial Converter: 
+	<img src="./hardware-diagram.svg" width="300">
+
 * Run `python controller/gamepad-control-relay.py`
 	* If using a PS3 controller you may need to press the PS button before the controller sends any inputs.
 
