@@ -143,7 +143,7 @@ ISR(USART1_RX_vect) {
 
 // Main entry point.
 int main(void) {
-	Serial_Init(38400, false);
+	Serial_Init(1000000, false);
 	Serial_CreateStream(NULL);
 
 	sei();
