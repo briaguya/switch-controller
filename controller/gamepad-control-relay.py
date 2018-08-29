@@ -7,7 +7,7 @@ import serial
 
 dev = InputDevice('/dev/input/event8')
 
-ser = serial.Serial('/dev/ttyACM0', 57600)
+ser = serial.Serial('/dev/ttyACM0', 115200)
 
 def send(msg):
     ser.write('%s\r\n'.encode('utf-8') % msg);
