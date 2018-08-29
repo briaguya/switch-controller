@@ -9,12 +9,17 @@ Lets you control a switch from your Linux Box
 	* E.g. Another blank [Arduino Uno Rev3](https://store.arduino.cc/usa/arduino-uno-rev3) or an [Adafruit CP2104 Friend](https://www.adafruit.com/product/3309)
 
 ## To build and flash firmware onto an Arduino Uno Rev3:
-* You will need packages `dfu-programmer` and `avr-gcc`.
+* You will need packages `dfu-programmer` and `avr-gcc` or `avr-libc`.
 	* To install these on a Mac with [homebrew](https://brew.sh):
 		```
 		brew install dfu-programmer
 		brew tap osx-cross/avr
 		brew install avr-gcc
+		```
+	* On Linux Mint 19:
+		```
+		sudo apt-get install dfu-programmer
+		sudo apt-get install avr-libc
 		```
 
 * Update `MCU` in the makefile to match your chip, either `MCU = atmega16u2` or `MCU = atmega32u4`.
