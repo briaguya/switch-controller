@@ -42,7 +42,7 @@ Lets you control a switch from your Linux Box
 * Connect the Switch Control board flashed with `Joystick.hex` to the Switch and the USB to Serial converter to the Linux PC.
 * Connect the the USB to Serial converter to the Switch Control board
 	* Example wiring diagram using a second Arduino as a USB to Serial Converter: 
-	<img src="./hardware-diagram.svg" width="600">
+	<img src="./hardware-diagram.png" width="600">
 
 * Run `python controller/gamepad-control-relay.py`
 	* If using a PS3 controller you may need to press the PS button before the controller sends any inputs.
