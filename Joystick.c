@@ -31,119 +31,72 @@ uint8_t target = RELEASE;
 uint16_t buttons;
 
 uint8_t HAT2 = 0;
-int LX2 = 0;     // Left  Stick X
-int LY2 = 0;     // Left  Stick Y
-int RX2 = 0;     // Right Stick X
-int RY2 = 0;     // Right Stick Y
+uint8_t LX2 = 0;     // Left  Stick X
+uint8_t LY2 = 0;     // Left  Stick Y
+uint8_t RX2 = 0;     // Right Stick X
+uint8_t RY2 = 0;     // Right Stick Y
 
-
-void parseLine(char* line) {
-
-	char btns[16];
-
-
-	sscanf(line, "%s %hhu %hhu %hhu %hhu", btns, &LX2, &LY2, &RX2, &RY2);
-
-
-	buttons = SWITCH_RELEASE;
-	HAT2 = 0;
-
-	switch (btns[0]) {
-		case '0':
-			HAT2 = HAT_TOP;
-			break;
-		case '1':
-			HAT2 = HAT_TOP_RIGHT;
-			break;
-		case '2':
-			HAT2 = HAT_RIGHT;
-			break;
-		case '3':
-			HAT2 = HAT_BOTTOM_RIGHT;
-			break;
-		case '4':
-			HAT2 = HAT_BOTTOM;
-			break;
-		case '5':
-			HAT2 = HAT_BOTTOM_LEFT;
-			break;
-		case '6':
-			HAT2 = HAT_LEFT;
-			break;
-		case '7':
-			HAT2 = HAT_TOP_LEFT;
-			break;
-		case '8':
-			HAT2 = HAT_CENTER;
-			break;
-		default:
-			break;
-	}
-	
-	if (btns[1] == '1') {
-		buttons |= SWITCH_LCLICK;
-	}
-	if (btns[2] == '1') {
-		buttons |= SWITCH_L;
-	}
-	if (btns[3] == '1') {
-		buttons = SWITCH_ZL;
-	}
-	if (btns[4] == '1') {
-		buttons |= SWITCH_SELECT;
-	}
-	if (btns[5] == '1') {
-		buttons |= SWITCH_CAPTURE;
-	}
-	if (btns[6] == '1') {
-		buttons |= SWITCH_A;
-	}
-	if (btns[7] == '1') {
-		buttons |= SWITCH_B;
-	}
-	if (btns[8] == '1') {
-		buttons |= SWITCH_X;
-	}
-	if (btns[9] == '1') {
-		buttons |= SWITCH_Y;
-	}
-	if (btns[10] == '1') {
-		buttons |= SWITCH_RCLICK;
-	}
-	if (btns[11] == '1') {
-		buttons |= SWITCH_R;
-	}
-	if (btns[12] == '1') {
-		buttons |= SWITCH_ZR;
-	}
-	if (btns[13] == '1') {
-		buttons |= SWITCH_START;
-	}
-	if (btns[14] == '1') {
-		buttons |= SWITCH_HOME;
-	}
-}
-
-#define MAX_BUFFER 32
-char b[MAX_BUFFER];
-uint8_t l = 0;
+// Use a circular buffer for the serial comms.
+volatile uint8_t buffer[256];
+volatile uint8_t buffer_head = 0;
+volatile uint8_t buffer_tail = 0;
 ISR(USART1_RX_vect) {
-	char c = fgetc(stdin);
-	if (Serial_IsSendReady()) {
-		printf("%c", c);
-	}
-	if (c == '\r') {
-		parseLine(b);
-		l = 0;
-		memset(b, 0, sizeof(b));
-	} else if (c != '\n' && l < MAX_BUFFER) {
-		b[l++] = c;
+	if(buffer_head == (buffer_tail - 1))
+		printf("X"); // overrun
+	buffer[buffer_head++] = fgetc(stdin);
+}
+
+
+void Serial_Task(void) {
+	static uint8_t l = 0;
+	static uint8_t b[7];
+
+	uint8_t val;
+	char c;
+
+	while(buffer_tail != buffer_head) {
+
+		c = buffer[buffer_tail];
+
+		if ((c == '\r' || c == '\n')) {
+			if(l == 14) {
+				HAT2 = b[0];
+				buttons = (b[1] << 8) | b[2];
+				LX2 = b[3];
+				LY2 = b[4];
+				RX2 = b[5];
+				RY2 = b[6];
+			}
+			l=0;
+			memset(b, 0, sizeof(b));
+		} else {
+
+			if(c >= '0' && c <= '9') {
+				val = c - '0';
+			} else if (c >= 'a' && c <= 'f') {
+				val = (c - 'a') + 0xa;
+			} else if (c >= 'A' && c <= 'F') {
+				val = (c - 'A') + 0xa;
+			} else {
+				val = 0xff;
+			}
+
+			if (val == 0xff) {
+				// ignore none-hex and line endings
+				;
+			} else {
+				b[l/2] |= val << (4*((l+1)%2)); // hex 2 bin
+				l += 1;
+			}
+		}
+		buffer_tail++;
 	}
 }
+
 
 // Main entry point.
 int main(void) {
-	Serial_Init(250000, false);
+	Serial_Init(115200, false);
 	Serial_CreateStream(NULL);
 
 	sei();
@@ -159,6 +112,8 @@ int main(void) {
 		HID_Task();
 		// We also need to run the main USB management task.
 		USB_USBTask();
+		// Check the serial buffer.
+		Serial_Task();
 	}
 }
 
