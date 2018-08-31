@@ -95,6 +95,11 @@ if __name__ == '__main__':
     while True:
         sent = False
         for event in sdl2.ext.get_events():
+            # we have to fetch the events from SDL in order for the controller
+            # state to be updated. we may also want to conditionally run an
+            # immediate update on certain events, so as to avoid dropping
+            # very fast button presses. this is why the "sent" variable exists.
+            # for now though, just pass.
             pass
 
         if not sent:
