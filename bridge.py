@@ -89,7 +89,7 @@ if __name__ == '__main__':
     except AttributeError:
         print('Using controller {:s} for input.'.format(args.controller))
 
-    ser = serial.Serial(args.port, args.baud_rate)
+    ser = serial.Serial(args.port, args.baud_rate, timeout=None)
     print('Using {:s} at {:d} baud for comms.'.format(args.port, args.baud_rate))
 
     while True:
@@ -105,4 +105,7 @@ if __name__ == '__main__':
         if not sent:
             send_state(ser, controller)
 
-        time.sleep(0.005)
+        while(ser.read(1) != b'U'):
+            pass
+        
+#        time.sleep(0.005)

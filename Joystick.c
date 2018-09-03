@@ -228,6 +228,8 @@ void HID_Task(void) {
 		Endpoint_Write_Stream_LE(&JoystickInputData, sizeof(JoystickInputData), NULL);
 		// We then send an IN packet on this endpoint.
 		Endpoint_ClearIN();
+		// Inform host that a packet was sent.
+		printf("U");
 
 		/* Clear the report data afterwards */
 		// memset(&JoystickInputData, 0, sizeof(JoystickInputData));
