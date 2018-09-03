@@ -10,6 +10,8 @@ import binascii
 import serial
 import time
 
+from tqdm import tqdm
+
 def enumerate_controllers():
     print('Controllers connected to this system:')
     for n in range(sdl2.SDL_NumJoysticks()):
@@ -106,27 +108,28 @@ if __name__ == '__main__':
     ser = serial.Serial(args.port, args.baud_rate, timeout=None)
     print('Using {:s} at {:d} baud for comms.'.format(args.port, args.baud_rate))
 
+    with tqdm(unit=' update') as pbar:
 
-    while True:
-        sent = False
-        for event in sdl2.ext.get_events():
-            # we have to fetch the events from SDL in order for the controller
-            # state to be updated. we may also want to conditionally run an
-            # immediate update on certain events, so as to avoid dropping
-            # very fast button presses. this is why the "sent" variable exists.
-            # for now though, just pass.
-            pass
+        while True:
+            sent = False
+            for event in sdl2.ext.get_events():
+                # we have to fetch the events from SDL in order for the controller
+                # state to be updated. we may also want to conditionally run an
+                # immediate update on certain events, so as to avoid dropping
+                # very fast button presses. this is why the "sent" variable exists.
+                # for now though, just pass.
+                pass
 
-        if not sent:
-            if args.playback is not None:
-                message = replay.readline()
-            else:
-                message = get_state(ser, controller)
-                if replay is not None:
-                    replay.write(message + b'\n')
-            ser.write(message + b'\n')
+            if not sent:
+                if args.playback is not None:
+                    message = replay.readline()
+                else:
+                    message = get_state(ser, controller)
+                    if replay is not None:
+                        replay.write(message + b'\n')
+                ser.write(message + b'\n')
 
-        while(ser.read(1) != b'U'):
-            pass
-        
-#        time.sleep(0.005)
+            while(ser.read(1) != b'U'):
+                pass
+
+            pbar.update()
