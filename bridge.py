@@ -68,28 +68,44 @@ def get_state(ser, controller):
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('-l', '--list-controllers', action='store_true', help='Display a list of controllers attached to the system.')
     parser.add_argument('-c', '--controller', type=str, default='0', help='Controller to use. Default: 0.')
     parser.add_argument('-b', '--baud-rate', type=int, default=115200, help='Baud rate. Default: 57600.')
     parser.add_argument('-p', '--port', type=str, default='/dev/ttyUSB0', help='Serial port. Default: /dev/ttyUSB0.')
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument('-l', '--list-controllers', action='store_true', help='Display a list of controllers attached to the system.')
+    group.add_argument('-R', '--record', type=str, default=None, help='Record events to file. Default: replay.txt.')
+    group.add_argument('-P', '--playback', type=str, default=None, help='Play back events from file. Default: replay.txt.')
+    
 
     args = parser.parse_args()
 
-    sdl2.SDL_Init(sdl2.SDL_INIT_GAMECONTROLLER)
+    controller = None
+    replay = None
 
-    if args.list_controllers:
-        enumerate_controllers()
-        exit(0)
+    if args.playback is None:
 
+        sdl2.SDL_Init(sdl2.SDL_INIT_GAMECONTROLLER)
 
-    controller = get_controller(args.controller)
-    try:
-        print('Using "{:s}" for input.'.format(sdl2.SDL_JoystickName(sdl2.SDL_GameControllerGetJoystick(controller)).decode('utf8')))
-    except AttributeError:
-        print('Using controller {:s} for input.'.format(args.controller))
+        if args.list_controllers:
+            enumerate_controllers()
+            exit(0)
+
+        controller = get_controller(args.controller)
+        try:
+            print('Using "{:s}" for input.'.format(sdl2.SDL_JoystickName(sdl2.SDL_GameControllerGetJoystick(controller)).decode('utf8')))
+        except AttributeError:
+            print('Using controller {:s} for input.'.format(args.controller))
+
+        if args.record is not None:
+            replay = open(args.record, 'wb')
+
+    else:
+        replay = open(args.playback, 'rb')
+
 
     ser = serial.Serial(args.port, args.baud_rate, timeout=None)
     print('Using {:s} at {:d} baud for comms.'.format(args.port, args.baud_rate))
+
 
     while True:
         sent = False
@@ -102,8 +118,12 @@ if __name__ == '__main__':
             pass
 
         if not sent:
-            message = get_state(ser, controller)
-            # TODO: write message to a replay file
+            if args.playback is not None:
+                message = replay.readline()
+            else:
+                message = get_state(ser, controller)
+                if replay is not None:
+                    replay.write(message + b'\n')
             ser.write(message + b'\n')
 
         while(ser.read(1) != b'U'):
