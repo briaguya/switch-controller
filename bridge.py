@@ -53,7 +53,7 @@ buttonmapping = [
 
 
 
-def send_state(ser, controller):
+def get_state(ser, controller):
     buttons = sum([sdl2.SDL_GameControllerGetButton(controller, b)<<n for n,b in enumerate(buttonmapping)])
     hat = 0
     lx = (sdl2.SDL_GameControllerGetAxis(controller, 0) >> 8) + 128
@@ -62,8 +62,7 @@ def send_state(ser, controller):
     ry = (sdl2.SDL_GameControllerGetAxis(controller, 3) >> 8) + 128
 
     bytes = struct.pack('>BHBBBB', hat, buttons, lx, ly, rx, ry)
-    message = binascii.hexlify(bytes)
-    ser.write(message + b'\n')
+    return binascii.hexlify(bytes)
 
 
 if __name__ == '__main__':
@@ -103,7 +102,9 @@ if __name__ == '__main__':
             pass
 
         if not sent:
-            send_state(ser, controller)
+            message = get_state(ser, controller)
+            # TODO: write message to a replay file
+            ser.write(message + b'\n')
 
         while(ser.read(1) != b'U'):
             pass
