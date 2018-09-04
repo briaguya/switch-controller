@@ -33,18 +33,30 @@ Lets you control a switch from your Linux Box
 	sudo dfu-programmer atmega16u2 flash Joystick.hex
 	sudo dfu-programmer atmega16u2 reset
 	```
-* Install python libraries `pyserial` and `evdev`
+* Install SDL2 <!-- https://github.com/cztomczak/cefpython/blob/master/examples/pysdl2.py -->
+	* To install these on a Mac with [homebrew](https://brew.sh):
+		```
+		brew install sdl2
+		```
+	* On Linux Mint 19:
+		```
+		sudo apt-get install libsdl2-dev
+		```
+* Install python libraries `pyserial`, `evdev`, `PySDL2`, and `tqdm`
 	```
 	pip install pyserial
 	pip install evdev
+	pip install PySDL2
+	pip install tqdm
 	```
-* Edit `controller/gamepad-control-relay.py` to match your input and serial devices, as well as to match the bindings of your controller.  Included bindings are for a wired PS3 Dualshock 3.
+
 * Connect the Switch Control board flashed with `Joystick.hex` to the Switch and the USB to Serial converter to the Linux PC.
 * Connect the the USB to Serial converter to the Switch Control board
 	* Example wiring diagram using a second Arduino as a USB to Serial Converter: 
 	<img src="./hardware-diagram.png" width="600">
 
-* Run `python controller/gamepad-control-relay.py`
+* Run `python bridge.py`
+	* You can see a list of available command line options with `python bridge.py -h`
 	* If using a PS3 controller you may need to press the PS button before the controller sends any inputs.
 
 ## Credit and Thanks
