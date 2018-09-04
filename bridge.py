@@ -129,7 +129,11 @@ if __name__ == '__main__':
                         replay.write(message + b'\n')
                 ser.write(message + b'\n')
 
-            while(ser.read(1) != b'U'):
-                pass
+            while True:
+                response = ser.read(1)
+                if response == b'U':
+                    break
+                elif response == b'X':
+                    print('Arduino reported buffer overrun.')
 
             pbar.update()
