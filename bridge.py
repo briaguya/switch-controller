@@ -37,10 +37,10 @@ def get_controller(c):
 
 
 buttonmapping = [
-    sdl2.SDL_CONTROLLER_BUTTON_Y, # Y
-    sdl2.SDL_CONTROLLER_BUTTON_B, # B
-    sdl2.SDL_CONTROLLER_BUTTON_A, # A
-    sdl2.SDL_CONTROLLER_BUTTON_X, # X
+    sdl2.SDL_CONTROLLER_BUTTON_X, # Y
+    sdl2.SDL_CONTROLLER_BUTTON_A, # B
+    sdl2.SDL_CONTROLLER_BUTTON_B, # A
+    sdl2.SDL_CONTROLLER_BUTTON_Y, # X
     sdl2.SDL_CONTROLLER_BUTTON_LEFTSHOULDER, # L
     sdl2.SDL_CONTROLLER_BUTTON_RIGHTSHOULDER, #R
     sdl2.SDL_CONTROLLER_BUTTON_LEFTSTICK, # ZL
@@ -105,7 +105,7 @@ if __name__ == '__main__':
         replay = open(args.playback, 'rb')
 
 
-    ser = serial.Serial(args.port, args.baud_rate, timeout=None)
+    ser = serial.Serial(args.port, args.baud_rate, bytesize=serial.EIGHTBITS, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, timeout=None)
     print('Using {:s} at {:d} baud for comms.'.format(args.port, args.baud_rate))
 
     with tqdm(unit=' update') as pbar:
