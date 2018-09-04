@@ -96,7 +96,7 @@ void Serial_Task(void) {
 
 // Main entry point.
 int main(void) {
-	Serial_Init(115200, false);
+	Serial_Init(115200, true);
 	Serial_CreateStream(NULL);
 
 	sei();
