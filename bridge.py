@@ -147,14 +147,13 @@ class InputStack(object):
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
+    parser.add_argument('-l', '--list-controllers', action='store_true', help='Display a list of controllers attached to the system.')
     parser.add_argument('-c', '--controller', type=str, default='0', help='Controller to use. Default: 0.')
     parser.add_argument('-b', '--baud-rate', type=int, default=115200, help='Baud rate. Default: 115200.')
     parser.add_argument('-p', '--port', type=str, default='/dev/ttyUSB0', help='Serial port. Default: /dev/ttyUSB0.')
-    group = parser.add_mutually_exclusive_group()
-    group.add_argument('-l', '--list-controllers', action='store_true', help='Display a list of controllers attached to the system.')
-    group.add_argument('-R', '--record', type=str, default=None, help='Record events to file. Default: replay.txt.')
-    group.add_argument('-P', '--playback', type=str, default=None, help='Play back events from file. Default: replay.txt.')
-    
+    parser.add_argument('-R', '--record', type=str, default=None, help='Record events to file.')
+    parser.add_argument('-P', '--playback', type=str, default=None, help='Play back events from file.')
+    parser.add_argument('-d', '--dontexit', action='store_true', help='Switch to live input when playback finishes, instead of exiting. Default: False.')
 
     args = parser.parse_args()
 
@@ -168,10 +167,10 @@ if __name__ == '__main__':
 
     input_stack = InputStack()
 
+    if args.playback is None or args.dontexit:
+        input_stack.push(controller_states(args.controller))
     if args.playback is not None:
         input_stack.push(replay_states(args.playback))
-    else:
-        input_stack.push(controller_states(args.controller))
 
     record = open(args.record, 'wb') if args.record is not None else None
 
