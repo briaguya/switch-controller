@@ -8,6 +8,7 @@ import sdl2.ext
 import struct
 import binascii
 import serial
+import math
 import time
 
 from tqdm import tqdm
@@ -72,18 +73,75 @@ hatcodes = [8, 0, 2, 1, 4, 8, 3, 8, 6, 7, 8, 8, 5, 8, 8]
 axis_deadzone = 1000
 trigger_deadzone = 0
 
-def get_state(ser, controller):
-    buttons = sum([sdl2.SDL_GameControllerGetButton(controller, b)<<n for n,b in enumerate(buttonmapping)])
-    buttons |=  (abs(sdl2.SDL_GameControllerGetAxis(controller, sdl2.SDL_CONTROLLER_AXIS_TRIGGERLEFT)) > trigger_deadzone) << 6
-    buttons |=  (abs(sdl2.SDL_GameControllerGetAxis(controller, sdl2.SDL_CONTROLLER_AXIS_TRIGGERRIGHT)) > trigger_deadzone) << 7
 
-    hat = hatcodes[sum([sdl2.SDL_GameControllerGetButton(controller, b)<<n for n,b in enumerate(hatmapping)])]
+def controller_states(controller_id):
 
-    rawaxis = [sdl2.SDL_GameControllerGetAxis(controller, n) for n in axismapping]
-    axis = [((0 if abs(x) < axis_deadzone else x) >> 8) + 128 for x in rawaxis]
+    sdl2.SDL_Init(sdl2.SDL_INIT_GAMECONTROLLER)
 
-    rawbytes = struct.pack('>BHBBBB', hat, buttons, *axis)
-    return binascii.hexlify(rawbytes)
+    controller = get_controller(controller_id)
+
+    try:
+        print('Using "{:s}" for input.'.format(
+            sdl2.SDL_JoystickName(sdl2.SDL_GameControllerGetJoystick(controller)).decode('utf8')))
+    except AttributeError:
+        print('Using controller {:s} for input.'.format(controller_id))
+
+    while True:
+        buttons = sum([sdl2.SDL_GameControllerGetButton(controller, b)<<n for n,b in enumerate(buttonmapping)])
+        buttons |=  (abs(sdl2.SDL_GameControllerGetAxis(controller, sdl2.SDL_CONTROLLER_AXIS_TRIGGERLEFT)) > trigger_deadzone) << 6
+        buttons |=  (abs(sdl2.SDL_GameControllerGetAxis(controller, sdl2.SDL_CONTROLLER_AXIS_TRIGGERRIGHT)) > trigger_deadzone) << 7
+
+        hat = hatcodes[sum([sdl2.SDL_GameControllerGetButton(controller, b)<<n for n,b in enumerate(hatmapping)])]
+
+        rawaxis = [sdl2.SDL_GameControllerGetAxis(controller, n) for n in axismapping]
+        axis = [((0 if abs(x) < axis_deadzone else x) >> 8) + 128 for x in rawaxis]
+
+        rawbytes = struct.pack('>BHBBBB', hat, buttons, *axis)
+        yield binascii.hexlify(rawbytes) + b'\n'
+
+
+def replay_states(filename):
+    with open(filename, 'rb') as replay:
+        yield from replay.readlines()
+
+
+def example_macro():
+    buttons = 0
+    hat = 8
+    rx = 128
+    ry = 128
+    for i in range(240):
+        lx = int((1.0 + math.sin(2 * math.pi * i / 240)) * 127)
+        ly = int((1.0 + math.cos(2 * math.pi * i / 240)) * 127)
+        rawbytes = struct.pack('>BHBBBB', hat, buttons, lx, ly, rx, ry)
+        yield binascii.hexlify(rawbytes) + b'\n'
+
+
+
+
+class InputStack(object):
+    def __init__(self):
+        self.l = []
+
+    def push(self, it):
+        self.l.append(it)
+
+    def pop(self):
+        self.l.pop()
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        while True:
+            try:
+                return next(self.l[-1])
+            except StopIteration:
+                self.l.pop()
+            except IndexError:
+                raise StopIteration
+
+
 
 
 if __name__ == '__main__':
@@ -100,32 +158,22 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    controller = None
-    replay = None
-
-    if args.playback is None:
-
+    if args.list_controllers:
         sdl2.SDL_Init(sdl2.SDL_INIT_GAMECONTROLLER)
-
-        if args.list_controllers:
-            enumerate_controllers()
-            exit(0)
-
-        controller = get_controller(args.controller)
-        try:
-            print('Using "{:s}" for input.'.format(sdl2.SDL_JoystickName(sdl2.SDL_GameControllerGetJoystick(controller)).decode('utf8')))
-        except AttributeError:
-            print('Using controller {:s} for input.'.format(args.controller))
-
-        if args.record is not None:
-            replay = open(args.record, 'wb')
-
-    else:
-        replay = open(args.playback, 'rb')
-
+        enumerate_controllers()
+        exit(0)
 
     ser = serial.Serial(args.port, args.baud_rate, bytesize=serial.EIGHTBITS, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, timeout=None)
     print('Using {:s} at {:d} baud for comms.'.format(args.port, args.baud_rate))
+
+    input_stack = InputStack()
+
+    if args.playback is not None:
+        input_stack.push(replay_states(args.playback))
+    else:
+        input_stack.push(controller_states(args.controller))
+
+    record = open(args.record, 'wb') if args.record is not None else None
 
     with tqdm(unit=' updates') as pbar:
 
@@ -134,18 +182,20 @@ if __name__ == '__main__':
             for event in sdl2.ext.get_events():
                 # we have to fetch the events from SDL in order for the controller
                 # state to be updated.
+                if event.type == sdl2.SDL_JOYBUTTONDOWN:
+                    if event.jbutton.button == 1:
+                        input_stack.push(example_macro())
                 pass
 
-            if args.playback is not None:
-                message = replay.readline()
-                if message == b'':
-                    # replay finished
-                    break
-            else:
-                message = get_state(ser, controller) + b'\n'
-                if replay is not None:
-                    replay.write(message)
-            ser.write(message)
+            # to replay a macro, "input_stack.push(replay_states(filename))"
+
+            try:
+                message = next(input_stack)
+                ser.write(message)
+                if record is not None:
+                    record.write(message)
+            except StopIteration:
+                break
 
             # update speed meter on console.
             pbar.set_description('Sent {:s}'.format(message[:-1].decode('utf8')))
