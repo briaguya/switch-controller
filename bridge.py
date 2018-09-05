@@ -42,7 +42,7 @@ buttonmapping = [
     sdl2.SDL_CONTROLLER_BUTTON_B, # A
     sdl2.SDL_CONTROLLER_BUTTON_Y, # X
     sdl2.SDL_CONTROLLER_BUTTON_LEFTSHOULDER, # L
-    sdl2.SDL_CONTROLLER_BUTTON_RIGHTSHOULDER, #R
+    sdl2.SDL_CONTROLLER_BUTTON_RIGHTSHOULDER, # R
     sdl2.SDL_CONTROLLER_BUTTON_INVALID, # ZL
     sdl2.SDL_CONTROLLER_BUTTON_INVALID, # ZR
     sdl2.SDL_CONTROLLER_BUTTON_BACK, # SELECT
@@ -54,40 +54,27 @@ buttonmapping = [
 ]
 
 axismapping = [
-    sdl2.SDL_CONTROLLER_AXIS_LEFTX,
-    sdl2.SDL_CONTROLLER_AXIS_LEFTY,
-    sdl2.SDL_CONTROLLER_AXIS_RIGHTX,
-    sdl2.SDL_CONTROLLER_AXIS_RIGHTY,
+    sdl2.SDL_CONTROLLER_AXIS_LEFTX, # LX
+    sdl2.SDL_CONTROLLER_AXIS_LEFTY, # LY
+    sdl2.SDL_CONTROLLER_AXIS_RIGHTX, # RX
+    sdl2.SDL_CONTROLLER_AXIS_RIGHTY, # RY
 ]
+
+hatmapping = [
+    sdl2.SDL_CONTROLLER_BUTTON_DPAD_UP, # UP
+    sdl2.SDL_CONTROLLER_BUTTON_DPAD_RIGHT, # RIGHT
+    sdl2.SDL_CONTROLLER_BUTTON_DPAD_DOWN, # DOWN
+    sdl2.SDL_CONTROLLER_BUTTON_DPAD_LEFT, # LEFT
+]
+
+hatcodes = [8, 0, 2, 1, 4, 8, 3, 8, 6, 7, 8, 8, 5, 8, 8]
 
 
 def get_state(ser, controller):
     buttons = sum([sdl2.SDL_GameControllerGetButton(controller, b)<<n for n,b in enumerate(buttonmapping)])
     buttons |=  (0x01<<6) if sdl2.SDL_GameControllerGetAxis(controller, sdl2.SDL_CONTROLLER_AXIS_TRIGGERLEFT) else 0
     buttons |=  (0x01<<7) if sdl2.SDL_GameControllerGetAxis(controller, sdl2.SDL_CONTROLLER_AXIS_TRIGGERRIGHT) else 0
-    dpad = [0]*4
-    dpad[0] = sdl2.SDL_GameControllerGetButton(controller, sdl2.SDL_CONTROLLER_BUTTON_DPAD_UP)
-    dpad[1] = sdl2.SDL_GameControllerGetButton(controller, sdl2.SDL_CONTROLLER_BUTTON_DPAD_RIGHT)
-    dpad[2] = sdl2.SDL_GameControllerGetButton(controller, sdl2.SDL_CONTROLLER_BUTTON_DPAD_DOWN)
-    dpad[3] = sdl2.SDL_GameControllerGetButton(controller, sdl2.SDL_CONTROLLER_BUTTON_DPAD_LEFT)
-    if (dpad == [1,0,0,0]):
-        hat = 0
-    elif (dpad == [1,1,0,0]):
-        hat = 1
-    elif (dpad == [0,1,0,0]):
-        hat = 2
-    elif (dpad == [0,1,1,0]):
-        hat = 3
-    elif (dpad == [0,0,1,0]):
-        hat = 4
-    elif (dpad == [0,0,1,1]):
-        hat = 5
-    elif (dpad == [0,0,0,1]):
-        hat = 6
-    elif (dpad == [1,0,0,1]):
-        hat = 7
-    elif (dpad == [0,0,0,0]):
-        hat = 8
+    hat = hatcodes[sum([sdl2.SDL_GameControllerGetButton(controller, b)<<n for n,b in enumerate(hatmapping)])]
     rawaxis = [sdl2.SDL_GameControllerGetAxis(controller, n) for n in axismapping]
     axis = [((0 if abs(x) < 1000 else x) >> 8) + 128 for x in rawaxis]
 
