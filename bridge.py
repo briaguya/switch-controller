@@ -127,7 +127,7 @@ if __name__ == '__main__':
     ser = serial.Serial(args.port, args.baud_rate, bytesize=serial.EIGHTBITS, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, timeout=None)
     print('Using {:s} at {:d} baud for comms.'.format(args.port, args.baud_rate))
 
-    with tqdm(unit=' update') as pbar:
+    with tqdm(unit=' updates') as pbar:
 
         while True:
 
@@ -139,10 +139,14 @@ if __name__ == '__main__':
             if args.playback is not None:
                 message = replay.readline()
             else:
-                message = get_state(ser, controller)
+                message = get_state(ser, controller) + b'\n'
                 if replay is not None:
-                    replay.write(message + b'\n')
-            ser.write(message + b'\n')
+                    replay.write(message)
+            ser.write(message)
+
+            # update speed meter on console.
+            pbar.set_description('Sent {:s}'.format(message[:-1].decode('utf8')))
+            pbar.update()
 
             while True:
                 # wait for the arduino to request another state.
@@ -152,5 +156,3 @@ if __name__ == '__main__':
                 elif response == b'X':
                     print('Arduino reported buffer overrun.')
 
-            # update speed meter on console.
-            pbar.update()
