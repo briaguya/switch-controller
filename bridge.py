@@ -138,6 +138,9 @@ if __name__ == '__main__':
 
             if args.playback is not None:
                 message = replay.readline()
+                if message == b'':
+                    # replay finished
+                    break
             else:
                 message = get_state(ser, controller) + b'\n'
                 if replay is not None:
