@@ -91,8 +91,8 @@ def get_state(ser, controller):
     rawaxis = [sdl2.SDL_GameControllerGetAxis(controller, n) for n in axismapping]
     axis = [((0 if abs(x) < 1000 else x) >> 8) + 128 for x in rawaxis]
 
-    bytes = struct.pack('>BHBBBB', hat, buttons, *axis)
-    return binascii.hexlify(bytes)
+    rawbytes = struct.pack('>BHBBBB', hat, buttons, *axis)
+    return binascii.hexlify(rawbytes)
 
 
 if __name__ == '__main__':
