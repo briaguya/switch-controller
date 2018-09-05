@@ -53,6 +53,12 @@ buttonmapping = [
     sdl2.SDL_CONTROLLER_BUTTON_INVALID, # CAPTURE
 ]
 
+axismapping = [
+    sdl2.SDL_CONTROLLER_AXIS_LEFTX,
+    sdl2.SDL_CONTROLLER_AXIS_LEFTY,
+    sdl2.SDL_CONTROLLER_AXIS_RIGHTX,
+    sdl2.SDL_CONTROLLER_AXIS_RIGHTY,
+]
 
 
 def get_state(ser, controller):
@@ -82,12 +88,10 @@ def get_state(ser, controller):
         hat = 7
     elif (dpad == [0,0,0,0]):
         hat = 8
-    lx = (sdl2.SDL_GameControllerGetAxis(controller, sdl2.SDL_CONTROLLER_AXIS_LEFTX) >> 8) + 128
-    ly = (sdl2.SDL_GameControllerGetAxis(controller, sdl2.SDL_CONTROLLER_AXIS_LEFTY) >> 8) + 128
-    rx = (sdl2.SDL_GameControllerGetAxis(controller, sdl2.SDL_CONTROLLER_AXIS_RIGHTX) >> 8) + 128
-    ry = (sdl2.SDL_GameControllerGetAxis(controller, sdl2.SDL_CONTROLLER_AXIS_RIGHTY) >> 8) + 128
+    rawaxis = [sdl2.SDL_GameControllerGetAxis(controller, n) for n in axismapping]
+    axis = [((0 if abs(x) < 1000 else x) >> 8) + 128 for x in rawaxis]
 
-    bytes = struct.pack('>BHBBBB', hat, buttons, lx, ly, rx, ry)
+    bytes = struct.pack('>BHBBBB', hat, buttons, *axis)
     return binascii.hexlify(bytes)
 
 
