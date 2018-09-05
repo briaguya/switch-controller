@@ -10,3 +10,4 @@
 *.eep
 config.py
 config2.py
+/.idea
