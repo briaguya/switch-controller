@@ -2,6 +2,7 @@
 
 
 import argparse
+from contextlib import contextmanager
 
 import sdl2
 import sdl2.ext
@@ -169,43 +170,46 @@ if __name__ == '__main__':
     input_stack = InputStack()
 
     if args.playback is None or args.dontexit:
-        input_stack.push(controller_states(args.controller))
+        live = controller_states(args.controller)
+        next(live) # pull a controller update to make it print the name before starting speed meter
+        input_stack.push(live)
     if args.playback is not None:
         input_stack.push(replay_states(args.playback))
 
-    record = open(args.record, 'wb') if args.record is not None else None
-
-    with tqdm(unit=' updates', disable=args.quiet) as pbar:
-
-        while True:
-
-            for event in sdl2.ext.get_events():
-                # we have to fetch the events from SDL in order for the controller
-                # state to be updated.
-                if event.type == sdl2.SDL_JOYBUTTONDOWN:
-                    if event.jbutton.button == 1:
-                        input_stack.push(example_macro())
-                pass
-
-            # to replay a macro, "input_stack.push(replay_states(filename))"
-
+    with (open(args.record, 'wb') if args.record is not None else contextmanager(lambda: iter([None]))()) as record:
+        with tqdm(unit=' updates', disable=args.quiet) as pbar:
             try:
-                message = next(input_stack)
-                ser.write(message)
-                if record is not None:
-                    record.write(message)
-            except StopIteration:
-                break
+                while True:
 
-            # update speed meter on console.
-            pbar.set_description('Sent {:s}'.format(message[:-1].decode('utf8')))
-            pbar.update()
+                    for event in sdl2.ext.get_events():
+                        # we have to fetch the events from SDL in order for the controller
+                        # state to be updated.
+                        if event.type == sdl2.SDL_JOYBUTTONDOWN:
+                            if event.jbutton.button == 1:
+                                input_stack.push(example_macro())
+                        pass
 
-            while True:
-                # wait for the arduino to request another state.
-                response = ser.read(1)
-                if response == b'U':
-                    break
-                elif response == b'X':
-                    print('Arduino reported buffer overrun.')
+                    # to replay a macro, "input_stack.push(replay_states(filename))"
 
+                    try:
+                        message = next(input_stack)
+                        ser.write(message)
+                        if record is not None:
+                            record.write(message)
+                    except StopIteration:
+                        break
+
+                    # update speed meter on console.
+                    pbar.set_description('Sent {:s}'.format(message[:-1].decode('utf8')))
+                    pbar.update()
+
+                    while True:
+                        # wait for the arduino to request another state.
+                        response = ser.read(1)
+                        if response == b'U':
+                            break
+                        elif response == b'X':
+                            print('Arduino reported buffer overrun.')
+
+            except KeyboardInterrupt:
+                print('\nExiting due to keyboard interrupt.')
