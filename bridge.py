@@ -184,12 +184,15 @@ if __name__ == '__main__':
                     for event in sdl2.ext.get_events():
                         # we have to fetch the events from SDL in order for the controller
                         # state to be updated.
-                        if event.type == sdl2.SDL_JOYBUTTONDOWN:
-                            if event.jbutton.button == 1:
-                                input_stack.push(example_macro())
-                        pass
 
-                    # to replay a macro, "input_stack.push(replay_states(filename))"
+                        # example of running a macro when a joystick button is pressed:
+                        #if event.type == sdl2.SDL_JOYBUTTONDOWN:
+                        #    if event.jbutton.button == 1:
+                        #        input_stack.push(example_macro())
+                        # or play from file:
+                        #        input_stack.push(replay_states(filename))
+
+                        pass
 
                     try:
                         message = next(input_stack)
