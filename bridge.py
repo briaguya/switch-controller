@@ -154,6 +154,7 @@ if __name__ == '__main__':
     parser.add_argument('-R', '--record', type=str, default=None, help='Record events to file.')
     parser.add_argument('-P', '--playback', type=str, default=None, help='Play back events from file.')
     parser.add_argument('-d', '--dontexit', action='store_true', help='Switch to live input when playback finishes, instead of exiting. Default: False.')
+    parser.add_argument('-q', '--quiet', action='store_true', help='Disable speed meter. Default: False.')
 
     args = parser.parse_args()
 
@@ -174,7 +175,7 @@ if __name__ == '__main__':
 
     record = open(args.record, 'wb') if args.record is not None else None
 
-    with tqdm(unit=' updates') as pbar:
+    with tqdm(unit=' updates', disable=args.quiet) as pbar:
 
         while True:
 
