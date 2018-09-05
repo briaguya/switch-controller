@@ -43,25 +43,49 @@ buttonmapping = [
     sdl2.SDL_CONTROLLER_BUTTON_Y, # X
     sdl2.SDL_CONTROLLER_BUTTON_LEFTSHOULDER, # L
     sdl2.SDL_CONTROLLER_BUTTON_RIGHTSHOULDER, #R
-    sdl2.SDL_CONTROLLER_BUTTON_LEFTSTICK, # ZL
-    sdl2.SDL_CONTROLLER_BUTTON_RIGHTSTICK, # ZR
+    sdl2.SDL_CONTROLLER_BUTTON_INVALID, # ZL
+    sdl2.SDL_CONTROLLER_BUTTON_INVALID, # ZR
     sdl2.SDL_CONTROLLER_BUTTON_BACK, # SELECT
     sdl2.SDL_CONTROLLER_BUTTON_START, # START
     sdl2.SDL_CONTROLLER_BUTTON_LEFTSTICK, # LCLICK
     sdl2.SDL_CONTROLLER_BUTTON_RIGHTSTICK, # RCLICK
     sdl2.SDL_CONTROLLER_BUTTON_GUIDE, # HOME
-    sdl2.SDL_CONTROLLER_BUTTON_GUIDE, # CAPTURE
+    sdl2.SDL_CONTROLLER_BUTTON_INVALID, # CAPTURE
 ]
 
 
 
 def get_state(ser, controller):
     buttons = sum([sdl2.SDL_GameControllerGetButton(controller, b)<<n for n,b in enumerate(buttonmapping)])
-    hat = 0
-    lx = (sdl2.SDL_GameControllerGetAxis(controller, 0) >> 8) + 128
-    ly = (sdl2.SDL_GameControllerGetAxis(controller, 1) >> 8) + 128
-    rx = (sdl2.SDL_GameControllerGetAxis(controller, 2) >> 8) + 128
-    ry = (sdl2.SDL_GameControllerGetAxis(controller, 3) >> 8) + 128
+    buttons |=  (0x01<<6) if sdl2.SDL_GameControllerGetAxis(controller, sdl2.SDL_CONTROLLER_AXIS_TRIGGERLEFT) else 0
+    buttons |=  (0x01<<7) if sdl2.SDL_GameControllerGetAxis(controller, sdl2.SDL_CONTROLLER_AXIS_TRIGGERRIGHT) else 0
+    dpad = [0]*4
+    dpad[0] = sdl2.SDL_GameControllerGetButton(controller, sdl2.SDL_CONTROLLER_BUTTON_DPAD_UP)
+    dpad[1] = sdl2.SDL_GameControllerGetButton(controller, sdl2.SDL_CONTROLLER_BUTTON_DPAD_RIGHT)
+    dpad[2] = sdl2.SDL_GameControllerGetButton(controller, sdl2.SDL_CONTROLLER_BUTTON_DPAD_DOWN)
+    dpad[3] = sdl2.SDL_GameControllerGetButton(controller, sdl2.SDL_CONTROLLER_BUTTON_DPAD_LEFT)
+    if (dpad == [1,0,0,0]):
+        hat = 0
+    elif (dpad == [1,1,0,0]):
+        hat = 1
+    elif (dpad == [0,1,0,0]):
+        hat = 2
+    elif (dpad == [0,1,1,0]):
+        hat = 3
+    elif (dpad == [0,0,1,0]):
+        hat = 4
+    elif (dpad == [0,0,1,1]):
+        hat = 5
+    elif (dpad == [0,0,0,1]):
+        hat = 6
+    elif (dpad == [1,0,0,1]):
+        hat = 7
+    elif (dpad == [0,0,0,0]):
+        hat = 8
+    lx = (sdl2.SDL_GameControllerGetAxis(controller, sdl2.SDL_CONTROLLER_AXIS_LEFTX) >> 8) + 128
+    ly = (sdl2.SDL_GameControllerGetAxis(controller, sdl2.SDL_CONTROLLER_AXIS_LEFTY) >> 8) + 128
+    rx = (sdl2.SDL_GameControllerGetAxis(controller, sdl2.SDL_CONTROLLER_AXIS_RIGHTX) >> 8) + 128
+    ry = (sdl2.SDL_GameControllerGetAxis(controller, sdl2.SDL_CONTROLLER_AXIS_RIGHTY) >> 8) + 128
 
     bytes = struct.pack('>BHBBBB', hat, buttons, lx, ly, rx, ry)
     return binascii.hexlify(bytes)
