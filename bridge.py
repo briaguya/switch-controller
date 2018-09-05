@@ -69,14 +69,18 @@ hatmapping = [
 
 hatcodes = [8, 0, 2, 1, 4, 8, 3, 8, 6, 7, 8, 8, 5, 8, 8]
 
+axis_deadzone = 1000
+trigger_deadzone = 0
 
 def get_state(ser, controller):
     buttons = sum([sdl2.SDL_GameControllerGetButton(controller, b)<<n for n,b in enumerate(buttonmapping)])
-    buttons |=  (0x01<<6) if sdl2.SDL_GameControllerGetAxis(controller, sdl2.SDL_CONTROLLER_AXIS_TRIGGERLEFT) else 0
-    buttons |=  (0x01<<7) if sdl2.SDL_GameControllerGetAxis(controller, sdl2.SDL_CONTROLLER_AXIS_TRIGGERRIGHT) else 0
+    buttons |=  (abs(sdl2.SDL_GameControllerGetAxis(controller, sdl2.SDL_CONTROLLER_AXIS_TRIGGERLEFT)) > trigger_deadzone) << 6
+    buttons |=  (abs(sdl2.SDL_GameControllerGetAxis(controller, sdl2.SDL_CONTROLLER_AXIS_TRIGGERRIGHT)) > trigger_deadzone) << 7
+
     hat = hatcodes[sum([sdl2.SDL_GameControllerGetButton(controller, b)<<n for n,b in enumerate(hatmapping)])]
+
     rawaxis = [sdl2.SDL_GameControllerGetAxis(controller, n) for n in axismapping]
-    axis = [((0 if abs(x) < 1000 else x) >> 8) + 128 for x in rawaxis]
+    axis = [((0 if abs(x) < axis_deadzone else x) >> 8) + 128 for x in rawaxis]
 
     rawbytes = struct.pack('>BHBBBB', hat, buttons, *axis)
     return binascii.hexlify(rawbytes)
