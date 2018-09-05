@@ -130,29 +130,27 @@ if __name__ == '__main__':
     with tqdm(unit=' update') as pbar:
 
         while True:
-            sent = False
+
             for event in sdl2.ext.get_events():
                 # we have to fetch the events from SDL in order for the controller
-                # state to be updated. we may also want to conditionally run an
-                # immediate update on certain events, so as to avoid dropping
-                # very fast button presses. this is why the "sent" variable exists.
-                # for now though, just pass.
+                # state to be updated.
                 pass
 
-            if not sent:
-                if args.playback is not None:
-                    message = replay.readline()
-                else:
-                    message = get_state(ser, controller)
-                    if replay is not None:
-                        replay.write(message + b'\n')
-                ser.write(message + b'\n')
+            if args.playback is not None:
+                message = replay.readline()
+            else:
+                message = get_state(ser, controller)
+                if replay is not None:
+                    replay.write(message + b'\n')
+            ser.write(message + b'\n')
 
             while True:
+                # wait for the arduino to request another state.
                 response = ser.read(1)
                 if response == b'U':
                     break
                 elif response == b'X':
                     print('Arduino reported buffer overrun.')
 
+            # update speed meter on console.
             pbar.update()
