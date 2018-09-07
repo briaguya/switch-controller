@@ -135,9 +135,11 @@ def controller_states(controller_id):
 
 
 def replay_states(filename):
-    with open(filename, 'rb') as replay:
-        yield from replay.readlines()
-
+    try:
+        with open(filename, 'rb') as replay:
+            yield from replay.readlines()
+    except FileNotFoundError:
+        print("Warning: replay file not found: {:s}".format(filename))
 
 def example_macro():
     buttons = 0
@@ -150,13 +152,34 @@ def example_macro():
         rawbytes = struct.pack('>BHBBBB', hat, buttons, lx, ly, rx, ry)
         yield binascii.hexlify(rawbytes) + b'\n'
 
-def addDefaultMacros(macros):
-    pass
-
 
 class InputStack(object):
-    def __init__(self):
+    def __init__(self, recordfilename=None):
         self.l = []
+        self.recordfilename = recordfilename
+        self.recordfile = None
+        self.macrofile = None
+
+    def __enter__(self):
+        if self.recordfilename is not None:
+            self.recordfile = open(self.recordfilename, 'wb')
+        return self
+
+    def __exit__(self, *args):
+        if self.recordfile is not None:
+            self.recordfile.close()
+        self.macro_end()
+
+    def macro_start(self, filename):
+        if self.macrofile is None:
+            self.macrofile = open(filename, 'wb')
+        else:
+            print('ERROR: Already recording a macro.')
+
+    def macro_end(self):
+        if self.macrofile is not None:
+            self.macrofile.close()
+            self.macrofile = None
 
     def push(self, it):
         self.l.append(it)
@@ -170,7 +193,12 @@ class InputStack(object):
     def __next__(self):
         while True:
             try:
-                return next(self.l[-1])
+                message = next(self.l[-1])
+                if self.recordfile is not None:
+                    self.recordfile.write(message)
+                if self.macrofile is not None:
+                    self.macrofile.write(message)
+                return message
             except StopIteration:
                 self.l.pop()
             except IndexError:
@@ -197,30 +225,32 @@ if __name__ == '__main__':
         enumerate_controllers()
         exit(0)
 
-    ser = serial.Serial(args.port, args.baud_rate, bytesize=serial.EIGHTBITS, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, timeout=None)
-    print('Using {:s} at {:d} baud for comms.'.format(args.port, args.baud_rate))
-
-    input_stack = InputStack()
     macros = {}
 
-    if args.playback is None or args.dontexit:
-        live = controller_states(args.controller)
-        next(live) # pull a controller update to make it print the name before starting speed meter
-        input_stack.push(live)
-    if args.playback is not None:
-        input_stack.push(replay_states(args.playback))
     if args.load_macros is not None:
-        f = open(args.load_macros)
-        for line in f.readlines():
-            line.split(' ')
-            macros[line[0]] = line[1]
-        
-    addDefaultMacros(macros)
+        with open(args.load_macros) as f:
+            for line in f:
+                line = line.strip().split(maxsplit=2)
+                if len(line) == 2:
+                    macros[line[0]] = line[1]
 
     with KeyboardContext() as kb:
-        with (open(args.record, 'wb') if args.record is not None else contextmanager(lambda: iter([None]))()) as record:
+
+        ser = serial.Serial(args.port, args.baud_rate, bytesize=serial.EIGHTBITS, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, timeout=None)
+        print('Using {:s} at {:d} baud for comms.'.format(args.port, args.baud_rate))
+
+        with InputStack(args.record) as input_stack:
+
+            if args.playback is None or args.dontexit:
+                live = controller_states(args.controller)
+                next(live)
+                input_stack.push(live)
+            if args.playback is not None:
+                input_stack.push(replay_states(args.playback))
+
             with tqdm(unit=' updates', disable=args.quiet) as pbar:
                 try:
+
                     while True:
 
                         for event in sdl2.ext.get_events():
@@ -236,16 +266,20 @@ if __name__ == '__main__':
 
                             pass
 
-                        c = kb.getch()
-                        if c == ord('r'):
-                            c = None
-                            #input_stack.push(replay_states("botw.txt"))
+                        try:
+                            c = chr(kb.getch())
+                            if c in macros:
+                                input_stack.push(replay_states(macros[c]))
+                            elif c.lower() in macros:
+                                input_stack.macro_start(macros[c.lower()])
+                            elif c == ' ':
+                                input_stack.macro_end()
+                        except ValueError:
+                            pass
 
                         try:
                             message = next(input_stack)
                             ser.write(message)
-                            if record is not None:
-                                record.write(message)
                         except StopIteration:
                             break
 
