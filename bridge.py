@@ -71,7 +71,7 @@ hatmapping = [
 
 hatcodes = [8, 0, 2, 1, 4, 8, 3, 8, 6, 7, 8, 8, 5, 8, 8]
 
-axis_deadzone = 1000
+axis_deadzone = 10000
 trigger_deadzone = 0
 
 
