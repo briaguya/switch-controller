@@ -14,6 +14,14 @@ import time
 
 from tqdm import tqdm
 
+import curses
+
+stdscr = curses.initscr()
+curses.noecho()
+curses.cbreak()
+stdscr.keypad(True)
+stdscr.nodelay(True)
+
 def enumerate_controllers():
     print('Controllers connected to this system:')
     for n in range(sdl2.SDL_NumJoysticks()):
@@ -71,7 +79,7 @@ hatmapping = [
 
 hatcodes = [8, 0, 2, 1, 4, 8, 3, 8, 6, 7, 8, 8, 5, 8, 8]
 
-axis_deadzone = 1000
+axis_deadzone = 10000
 trigger_deadzone = 0
 
 
@@ -193,6 +201,11 @@ if __name__ == '__main__':
                         #        input_stack.push(replay_states(filename))
 
                         pass
+                    
+                    c = stdscr.getch()
+                    if c == 114:
+                        c = None
+                        #input_stack.push(replay_states("botw.txt"))
 
                     try:
                         message = next(input_stack)
@@ -216,3 +229,9 @@ if __name__ == '__main__':
 
             except KeyboardInterrupt:
                 print('\nExiting due to keyboard interrupt.')
+                
+    curses.nocbreak()
+    stdscr.keypad(False)
+    curses.echo()
+    curses.endwin()
+
