@@ -150,7 +150,8 @@ def example_macro():
         rawbytes = struct.pack('>BHBBBB', hat, buttons, lx, ly, rx, ry)
         yield binascii.hexlify(rawbytes) + b'\n'
 
-
+def addDefaultMacros(macros):
+    pass
 
 
 class InputStack(object):
@@ -176,8 +177,6 @@ class InputStack(object):
                 raise StopIteration
 
 
-
-
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
@@ -189,6 +188,7 @@ if __name__ == '__main__':
     parser.add_argument('-P', '--playback', type=str, default=None, help='Play back events from file.')
     parser.add_argument('-d', '--dontexit', action='store_true', help='Switch to live input when playback finishes, instead of exiting. Default: False.')
     parser.add_argument('-q', '--quiet', action='store_true', help='Disable speed meter. Default: False.')
+    parser.add_argument('-M', '--load-macros', type=str, default=None, help='Load in-line macro definition file. Default: None')
 
     args = parser.parse_args()
 
@@ -201,6 +201,7 @@ if __name__ == '__main__':
     print('Using {:s} at {:d} baud for comms.'.format(args.port, args.baud_rate))
 
     input_stack = InputStack()
+    macros = {}
 
     if args.playback is None or args.dontexit:
         live = controller_states(args.controller)
@@ -208,6 +209,13 @@ if __name__ == '__main__':
         input_stack.push(live)
     if args.playback is not None:
         input_stack.push(replay_states(args.playback))
+    if args.load_macros is not None:
+        f = open(args.load_macros)
+        for line in f.readlines():
+            line.split(' ')
+            macros[line[0]] = line[1]
+        
+    addDefaultMacros(macros)
 
     with KeyboardContext() as kb:
         with (open(args.record, 'wb') if args.record is not None else contextmanager(lambda: iter([None]))()) as record:
