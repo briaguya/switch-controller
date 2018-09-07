@@ -14,6 +14,39 @@ import time
 
 from tqdm import tqdm
 
+curses_available = False
+
+try:
+    import curses
+    curses_available = True
+except ImportError:
+    pass
+
+
+class KeyboardContext(object):
+    def __enter__(self):
+        if curses_available:
+            self.stdscr = curses.initscr()
+            curses.noecho()
+            curses.cbreak()
+            self.stdscr.keypad(True)
+            self.stdscr.nodelay(True)
+        return self
+
+    def __exit__(self, *args):
+        if curses_available:
+            curses.nocbreak()
+            self.stdscr.keypad(False)
+            curses.echo()
+            curses.endwin()
+
+    def getch(self):
+        if curses_available:
+            return self.stdscr.getch()
+        else:
+            return curses.ERR
+
+
 def enumerate_controllers():
     print('Controllers connected to this system:')
     for n in range(sdl2.SDL_NumJoysticks()):
@@ -176,43 +209,49 @@ if __name__ == '__main__':
     if args.playback is not None:
         input_stack.push(replay_states(args.playback))
 
-    with (open(args.record, 'wb') if args.record is not None else contextmanager(lambda: iter([None]))()) as record:
-        with tqdm(unit=' updates', disable=args.quiet) as pbar:
-            try:
-                while True:
-
-                    for event in sdl2.ext.get_events():
-                        # we have to fetch the events from SDL in order for the controller
-                        # state to be updated.
-
-                        # example of running a macro when a joystick button is pressed:
-                        #if event.type == sdl2.SDL_JOYBUTTONDOWN:
-                        #    if event.jbutton.button == 1:
-                        #        input_stack.push(example_macro())
-                        # or play from file:
-                        #        input_stack.push(replay_states(filename))
-
-                        pass
-
-                    try:
-                        message = next(input_stack)
-                        ser.write(message)
-                        if record is not None:
-                            record.write(message)
-                    except StopIteration:
-                        break
-
-                    # update speed meter on console.
-                    pbar.set_description('Sent {:s}'.format(message[:-1].decode('utf8')))
-                    pbar.update()
-
+    with KeyboardContext() as kb:
+        with (open(args.record, 'wb') if args.record is not None else contextmanager(lambda: iter([None]))()) as record:
+            with tqdm(unit=' updates', disable=args.quiet) as pbar:
+                try:
                     while True:
-                        # wait for the arduino to request another state.
-                        response = ser.read(1)
-                        if response == b'U':
-                            break
-                        elif response == b'X':
-                            print('Arduino reported buffer overrun.')
 
-            except KeyboardInterrupt:
-                print('\nExiting due to keyboard interrupt.')
+                        for event in sdl2.ext.get_events():
+                            # we have to fetch the events from SDL in order for the controller
+                            # state to be updated.
+
+                            # example of running a macro when a joystick button is pressed:
+                            #if event.type == sdl2.SDL_JOYBUTTONDOWN:
+                            #    if event.jbutton.button == 1:
+                            #        input_stack.push(example_macro())
+                            # or play from file:
+                            #        input_stack.push(replay_states(filename))
+
+                            pass
+
+                        c = kb.getch()
+                        if c == ord('r'):
+                            c = None
+                            #input_stack.push(replay_states("botw.txt"))
+
+                        try:
+                            message = next(input_stack)
+                            ser.write(message)
+                            if record is not None:
+                                record.write(message)
+                        except StopIteration:
+                            break
+
+                        # update speed meter on console.
+                        pbar.set_description('Sent {:s}'.format(message[:-1].decode('utf8')))
+                        pbar.update()
+
+                        while True:
+                            # wait for the arduino to request another state.
+                            response = ser.read(1)
+                            if response == b'U':
+                                break
+                            elif response == b'X':
+                                print('Arduino reported buffer overrun.')
+
+                except KeyboardInterrupt:
+                    print('\nExiting due to keyboard interrupt.')
