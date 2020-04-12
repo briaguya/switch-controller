@@ -224,6 +224,20 @@ def example_macro():
             {'hat': hats_dict['not-pressed'], 'press_duration': 10},
         ])
 
+    # after looping through all the vividities
+    # first bring it back up to vividness
+    switch_controller_input_sequence.extend([
+        {'hat': hats_dict['dpad_up'], 'press_duration': 10},
+        {'hat': hats_dict['not-pressed'], 'press_duration': 10},
+    ])
+
+    # then bring the vividness cursor back to zero
+    for vividness in vividities:
+        switch_controller_input_sequence.extend([
+            {'hat': hats_dict['dpad_left'], 'press_duration': 10},
+            {'hat': hats_dict['not-pressed'], 'press_duration': 10},
+        ])
+
 
     lx = 128
     ly = 128
