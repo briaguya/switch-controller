@@ -161,6 +161,8 @@ def example_macro():
         {'buttons': buttons_dict['not_pressed']},
         {'buttons': buttons_dict['a']},
         {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['capture']},
+        {'buttons': buttons_dict['not_pressed']},
     ]
 
     lx = 128
@@ -174,6 +176,7 @@ def example_macro():
             buttons = switch_controller_input['buttons']
 
         rawbytes = struct.pack('>BHBBBB', hat, buttons, lx, ly, rx, ry)
+        # let's just use 50 cause it seems to make it like the button presses that way
         for blarg in range(50):
             yield binascii.hexlify(rawbytes) + b'\n'
 
