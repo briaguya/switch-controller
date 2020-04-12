@@ -160,30 +160,37 @@ def example_macro():
         'blarg': 8
     }
 
+    # todo: figure out opening it
+    # switch_controller_input_sequence = [
+    #     {'buttons': buttons_dict['a']},
+    #     {'buttons': buttons_dict['not_pressed'], 'press_duration': 200},
+    #     {'buttons': buttons_dict['a']},
+    #     {'buttons': buttons_dict['not_pressed'], 'press_duration': 20},
+    #     {'hat': hats_dict['dpad_up'], 'press_duration': 20},
+    #     {'buttons': buttons_dict['not_pressed'], 'press_duration': 20},
+    #     {'buttons': buttons_dict['a']},
+    #     {'buttons': buttons_dict['not_pressed'], 'press_duration': 200},
+    #     {'buttons': buttons_dict['x']},
+    #     {'buttons': buttons_dict['not_pressed']},
+    #     {'hat': hats_dict['dpad_up'], 'press_duration': 20},
+    #     {'buttons': buttons_dict['not_pressed']},
+    #     {'hat': hats_dict['dpad_right'], 'press_duration': 20},
+    #     {'buttons': buttons_dict['not_pressed']},
+    #     {'buttons': buttons_dict['a']},
+    #     {'buttons': buttons_dict['not_pressed']},
+    #     {'buttons': buttons_dict['l']},
+    #     {'buttons': buttons_dict['not_pressed']},
+    #     {'buttons': buttons_dict['l']},
+    #     {'buttons': buttons_dict['not_pressed']},
+    #     {'buttons': buttons_dict['l']},
+    #     {'buttons': buttons_dict['not_pressed']},
+    #     {'buttons': buttons_dict['capture'], 'press_duration': 20},
+    #     {'buttons': buttons_dict['not_pressed']},
+    # ]
+
+    # let's just assume we're already on the right tool/menu
     switch_controller_input_sequence = [
-        {'buttons': buttons_dict['a']},
-        {'buttons': buttons_dict['not_pressed'], 'press_duration': 200},
-        {'buttons': buttons_dict['a']},
-        {'buttons': buttons_dict['not_pressed']},
-        {'hat': hats_dict['dpad_up'], 'press_duration': 20},
-        {'buttons': buttons_dict['not_pressed']},
-        {'buttons': buttons_dict['a']},
-        {'buttons': buttons_dict['not_pressed']},
-        {'buttons': buttons_dict['x']},
-        {'buttons': buttons_dict['not_pressed']},
-        {'hat': hats_dict['dpad_up'], 'press_duration': 20},
-        {'buttons': buttons_dict['not_pressed']},
-        {'hat': hats_dict['dpad_right'], 'press_duration': 20},
-        {'buttons': buttons_dict['not_pressed']},
-        {'buttons': buttons_dict['a']},
-        {'buttons': buttons_dict['not_pressed']},
-        {'buttons': buttons_dict['l']},
-        {'buttons': buttons_dict['not_pressed']},
-        {'buttons': buttons_dict['l']},
-        {'buttons': buttons_dict['not_pressed']},
-        {'buttons': buttons_dict['l']},
-        {'buttons': buttons_dict['not_pressed']},
-        {'buttons': buttons_dict['capture'], 'press_duration': 20},
+        {'hat': hats_dict['dpad_right'], 'press_duration': 10},
         {'buttons': buttons_dict['not_pressed']},
     ]
 
