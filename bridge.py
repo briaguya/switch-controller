@@ -161,7 +161,7 @@ def example_macro():
         {'buttons': buttons_dict['not_pressed']},
         {'buttons': buttons_dict['a']},
         {'buttons': buttons_dict['not_pressed']},
-        {'buttons': buttons_dict['capture']},
+        {'buttons': buttons_dict['capture'], 'press_duration': 20},
         {'buttons': buttons_dict['not_pressed']},
     ]
 
@@ -171,13 +171,16 @@ def example_macro():
     ry = 128
     hat = 8
     buttons = buttons_dict['not_pressed']
+    press_duration = 50
     for switch_controller_input in switch_controller_input_sequence:
         if 'buttons' in switch_controller_input:
             buttons = switch_controller_input['buttons']
 
+        if 'press_duration' in switch_controller_input:
+            press_duration = switch_controller_input['press_duration']
+
         rawbytes = struct.pack('>BHBBBB', hat, buttons, lx, ly, rx, ry)
-        # let's just use 50 cause it seems to make it like the button presses that way
-        for blarg in range(50):
+        for blarg in range(press_duration):
             yield binascii.hexlify(rawbytes) + b'\n'
 
 
