@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="b274bc2d-e7b4-45d7-956b-61d318e7a444" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pipfile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pipfile.lock" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1aRfpWDcZWQbcn3xPcyVo9uasB6" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/bridge.py" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <module name="switch-controller" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/bridge.py" />
+      <option name="PARAMETERS" value="-p /dev/ttyACM0" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="bridge" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="switch-controller" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="$USER_HOME$/.local/share/virtualenvs/switch-controller-Lc3QM1K6/bin/python" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/bridge.py" />
+      <option name="PARAMETERS" value="-p /dev/ttyACM0" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="true" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="b274bc2d-e7b4-45d7-956b-61d318e7a444" name="Default Changelist" comment="" />
+      <created>1586703510061</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1586703510061</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="418" y="213" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1586704689188">
+      <screen x="0" y="30" width="1920" height="1050" />
+    </state>
+    <state x="418" y="213" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.30.1920.1050@0.30.1920.1050" timestamp="1586704689188" />
+    <state x="743" y="313" width="424" height="487" key="FileChooserDialogImpl" timestamp="1586704052359">
+      <screen x="0" y="30" width="1920" height="1050" />
+    </state>
+    <state x="743" y="313" width="424" height="487" key="FileChooserDialogImpl/0.30.1920.1050@0.30.1920.1050" timestamp="1586704052359" />
+    <state width="1897" height="341" key="GridCell.Tab.0.bottom" timestamp="1586704698096">
+      <screen x="0" y="30" width="1920" height="1050" />
+    </state>
+    <state width="1897" height="341" key="GridCell.Tab.0.bottom/0.30.1920.1050@0.30.1920.1050" timestamp="1586704698096" />
+    <state width="1897" height="341" key="GridCell.Tab.0.center" timestamp="1586704698096">
+      <screen x="0" y="30" width="1920" height="1050" />
+    </state>
+    <state width="1897" height="341" key="GridCell.Tab.0.center/0.30.1920.1050@0.30.1920.1050" timestamp="1586704698096" />
+    <state width="1897" height="341" key="GridCell.Tab.0.left" timestamp="1586704698095">
+      <screen x="0" y="30" width="1920" height="1050" />
+    </state>
+    <state width="1897" height="341" key="GridCell.Tab.0.left/0.30.1920.1050@0.30.1920.1050" timestamp="1586704698095" />
+    <state width="1897" height="341" key="GridCell.Tab.0.right" timestamp="1586704698096">
+      <screen x="0" y="30" width="1920" height="1050" />
+    </state>
+    <state width="1897" height="341" key="GridCell.Tab.0.right/0.30.1920.1050@0.30.1920.1050" timestamp="1586704698096" />
+    <state width="1897" height="341" key="GridCell.Tab.1.bottom" timestamp="1586704697438">
+      <screen x="0" y="30" width="1920" height="1050" />
+    </state>
+    <state width="1897" height="341" key="GridCell.Tab.1.bottom/0.30.1920.1050@0.30.1920.1050" timestamp="1586704697438" />
+    <state width="1897" height="341" key="GridCell.Tab.1.center" timestamp="1586704697438">
+      <screen x="0" y="30" width="1920" height="1050" />
+    </state>
+    <state width="1897" height="341" key="GridCell.Tab.1.center/0.30.1920.1050@0.30.1920.1050" timestamp="1586704697438" />
+    <state width="1897" height="341" key="GridCell.Tab.1.left" timestamp="1586704697438">
+      <screen x="0" y="30" width="1920" height="1050" />
+    </state>
+    <state width="1897" height="341" key="GridCell.Tab.1.left/0.30.1920.1050@0.30.1920.1050" timestamp="1586704697438" />
+    <state width="1897" height="341" key="GridCell.Tab.1.right" timestamp="1586704697438">
+      <screen x="0" y="30" width="1920" height="1050" />
+    </state>
+    <state width="1897" height="341" key="GridCell.Tab.1.right/0.30.1920.1050@0.30.1920.1050" timestamp="1586704697438" />
+    <state x="834" y="309" width="992" height="733" key="SettingsEditor" timestamp="1586704650761">
+      <screen x="0" y="30" width="1920" height="1050" />
+    </state>
+    <state x="834" y="309" width="992" height="733" key="SettingsEditor/0.30.1920.1050@0.30.1920.1050" timestamp="1586704650761" />
+    <state x="685" y="448" width="540" height="216" key="vcs.readOnlyHandler.ReadOnlyStatusDialog" timestamp="1586704405161">
+      <screen x="0" y="30" width="1920" height="1050" />
+    </state>
+    <state x="685" y="448" width="540" height="216" key="vcs.readOnlyHandler.ReadOnlyStatusDialog/0.30.1920.1050@0.30.1920.1050" timestamp="1586704405161" />
+  </component>
+</project>
