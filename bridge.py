@@ -157,7 +157,7 @@ def example_macro():
     hats_dict = {
         'dpad_up': 0,
         'dpad_right': 2,
-        'blarg': 8
+        'not-pressed': 8
     }
 
     # todo: figure out opening it
@@ -190,15 +190,19 @@ def example_macro():
 
     # let's just assume we're already on the right tool/menu
     switch_controller_input_sequence = [
+        {'buttons': buttons_dict['not_pressed'], 'press_duration': 200},
         {'hat': hats_dict['dpad_right'], 'press_duration': 10},
-        {'buttons': buttons_dict['not_pressed']},
+        {'hat': hats_dict['not-pressed'], 'press_duration': 10},
+        {'buttons': buttons_dict['not_pressed'], 'press_duration': 200},
+        {'buttons': buttons_dict['capture'], 'press_duration': 20},
+        {'buttons': buttons_dict['not_pressed'], 'press_duration': 200},
     ]
 
     lx = 128
     ly = 128
     rx = 128
     ry = 128
-    hat = 8
+    hat = hats_dict['not-pressed']
     buttons = buttons_dict['not_pressed']
     press_duration = 50
     for switch_controller_input in switch_controller_input_sequence:
