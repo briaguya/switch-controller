@@ -146,8 +146,10 @@ def replay_states(filename):
 def example_macro():
     # todo: figure out actual logic here because this is hacky af
     buttons_dict = {
+        'not_pressed': 0,
         'zr': 128,
-        'capture': 8192
+        'capture': 8192,
+        'a': 4
     }
 
     hats_dict = {
@@ -156,15 +158,121 @@ def example_macro():
 
     switch_controller_input_sequence = [
         {'buttons': buttons_dict['zr']},
-        {'buttons': buttons_dict['capture']}
+        {'buttons': buttons_dict['zr']},
+        {'buttons': buttons_dict['zr']},
+        {'buttons': buttons_dict['zr']},
+        {'buttons': buttons_dict['zr']},
+        {'buttons': buttons_dict['zr']},
+        {'buttons': buttons_dict['zr']},
+        {'buttons': buttons_dict['zr']},
+        {'buttons': buttons_dict['zr']},
+        {'buttons': buttons_dict['zr']},
+        {'buttons': buttons_dict['zr']},
+        {'buttons': buttons_dict['zr']},
+        {'buttons': buttons_dict['zr']},
+        {'buttons': buttons_dict['zr']},
+        {'buttons': buttons_dict['zr']},
+        {'buttons': buttons_dict['zr']},
+        {'buttons': buttons_dict['zr']},
+        {'buttons': buttons_dict['zr']},
+        {'buttons': buttons_dict['zr']},
+        {'buttons': buttons_dict['zr']},
+        {'buttons': buttons_dict['zr']},
+        {'buttons': buttons_dict['zr']},
+        {'buttons': buttons_dict['zr']},
+        {'buttons': buttons_dict['zr']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['a']},
+        {'buttons': buttons_dict['a']},
+        {'buttons': buttons_dict['a']},
+        {'buttons': buttons_dict['a']},
+        {'buttons': buttons_dict['a']},
+        {'buttons': buttons_dict['a']},
+        {'buttons': buttons_dict['a']},
+        {'buttons': buttons_dict['a']},
+        {'buttons': buttons_dict['a']},
+        {'buttons': buttons_dict['a']},
+        {'buttons': buttons_dict['a']},
+        {'buttons': buttons_dict['a']},
+        {'buttons': buttons_dict['a']},
+        {'buttons': buttons_dict['a']},
+        {'buttons': buttons_dict['a']},
+        {'buttons': buttons_dict['a']},
+        {'buttons': buttons_dict['a']},
+        {'buttons': buttons_dict['a']},
+        {'buttons': buttons_dict['a']},
+        {'buttons': buttons_dict['a']},
+        {'buttons': buttons_dict['a']},
+        {'buttons': buttons_dict['a']},
+        {'buttons': buttons_dict['a']},
+        {'buttons': buttons_dict['a']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['not_pressed']},
     ]
 
-    
     lx = 128
     ly = 128
     rx = 128
     ry = 128
     hat = 8
+    buttons = buttons_dict['not_pressed']
     for switch_controller_input in switch_controller_input_sequence:
         if 'buttons' in switch_controller_input:
             buttons = switch_controller_input['buttons']
@@ -279,9 +387,10 @@ if __name__ == '__main__':
                             # state to be updated.
 
                             # example of running a macro when a joystick button is pressed:
-                            #if event.type == sdl2.SDL_JOYBUTTONDOWN:
-                            #    if event.jbutton.button == 1:
-                            #        input_stack.push(example_macro())
+                            if event.type == sdl2.SDL_JOYBUTTONDOWN:
+                               # if we click in the left stick
+                               if event.jbutton.button == 11:
+                                   input_stack.push(example_macro())
                             # or play from file:
                             #        input_stack.push(replay_states(filename))
 
@@ -290,8 +399,8 @@ if __name__ == '__main__':
                         try:
                             c = chr(kb.getch())
 
-                            if c in macros:
-                                input_stack.push(macros[c])
+                            # if c in macros:
+                            #     input_stack.push(macros[c])
                                 # input_stack.push(replay_states(macros[c]))
                             # elif c.lower() in macros:
                             #     input_stack.macro_start(macros[c.lower()])
