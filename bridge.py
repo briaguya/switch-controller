@@ -190,12 +190,11 @@ def example_macro():
 
     # let's just assume we're already on the right tool/menu
     switch_controller_input_sequence = [
-        {'buttons': buttons_dict['not_pressed'], 'press_duration': 200},
         {'hat': hats_dict['dpad_right'], 'press_duration': 10},
         {'hat': hats_dict['not-pressed'], 'press_duration': 10},
-        {'buttons': buttons_dict['not_pressed'], 'press_duration': 200},
+        {'buttons': buttons_dict['not_pressed'], 'press_duration': 10},
         {'buttons': buttons_dict['capture'], 'press_duration': 20},
-        {'buttons': buttons_dict['not_pressed'], 'press_duration': 200},
+        {'buttons': buttons_dict['not_pressed'], 'press_duration': 10},
     ]
 
     lx = 128
