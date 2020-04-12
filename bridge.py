@@ -196,25 +196,51 @@ def example_macro():
 
     switch_controller_input_sequence = []
     # assume starting at the bottom left of h/v/b
-    for vividness in vividities:
-        # since we're starting in the bottom left, loop brightness first
-        for brightness in brightnesses:
+    for hue in hues:
+
+        for vividness in vividities:
+            # since we're starting in the bottom left, loop brightness first
+            # for brightness in brightnesses:
+            #     switch_controller_input_sequence.extend([
+            #         {'buttons': buttons_dict['not_pressed'], 'press_duration': 10},
+            #         {'buttons': buttons_dict['capture'], 'press_duration': 20},
+            #         {'buttons': buttons_dict['not_pressed'], 'press_duration': 10},
+            #         {'hat': hats_dict['dpad_right'], 'press_duration': 10},
+            #         {'hat': hats_dict['not-pressed'], 'press_duration': 10},
+            #     ])
+
+            # after looping through all brightnesses, bring the brightness cursor back to zero
+            for brightness in brightnesses:
+                switch_controller_input_sequence.extend([
+                    {'hat': hats_dict['dpad_left'], 'press_duration': 10},
+                    {'hat': hats_dict['not-pressed'], 'press_duration': 10},
+                ])
+
+            # hop up to vividness, go to the next one, hop back down
             switch_controller_input_sequence.extend([
-                {'buttons': buttons_dict['not_pressed'], 'press_duration': 10},
-                {'buttons': buttons_dict['capture'], 'press_duration': 20},
-                {'buttons': buttons_dict['not_pressed'], 'press_duration': 10},
+                {'hat': hats_dict['dpad_up'], 'press_duration': 10},
+                {'hat': hats_dict['not-pressed'], 'press_duration': 10},
                 {'hat': hats_dict['dpad_right'], 'press_duration': 10},
+                {'hat': hats_dict['not-pressed'], 'press_duration': 10},
+                {'hat': hats_dict['dpad_down'], 'press_duration': 10},
                 {'hat': hats_dict['not-pressed'], 'press_duration': 10},
             ])
 
-        # after looping through all brightnesses, bring the brightness cursor back to zero
-        for brightness in brightnesses:
+        # after looping through all the vividities
+        # first bring it back up to vividness
+        switch_controller_input_sequence.extend([
+            {'hat': hats_dict['dpad_up'], 'press_duration': 10},
+            {'hat': hats_dict['not-pressed'], 'press_duration': 10},
+        ])
+
+        # then bring the vividness cursor back to zero
+        for vividness in vividities:
             switch_controller_input_sequence.extend([
                 {'hat': hats_dict['dpad_left'], 'press_duration': 10},
                 {'hat': hats_dict['not-pressed'], 'press_duration': 10},
             ])
 
-        # hop up to vividness, go to the next one, hop back down
+        # hop up to hues, go to the next one, hop all the way back down to brightness
         switch_controller_input_sequence.extend([
             {'hat': hats_dict['dpad_up'], 'press_duration': 10},
             {'hat': hats_dict['not-pressed'], 'press_duration': 10},
@@ -222,22 +248,9 @@ def example_macro():
             {'hat': hats_dict['not-pressed'], 'press_duration': 10},
             {'hat': hats_dict['dpad_down'], 'press_duration': 10},
             {'hat': hats_dict['not-pressed'], 'press_duration': 10},
-        ])
-
-    # after looping through all the vividities
-    # first bring it back up to vividness
-    switch_controller_input_sequence.extend([
-        {'hat': hats_dict['dpad_up'], 'press_duration': 10},
-        {'hat': hats_dict['not-pressed'], 'press_duration': 10},
-    ])
-
-    # then bring the vividness cursor back to zero
-    for vividness in vividities:
-        switch_controller_input_sequence.extend([
-            {'hat': hats_dict['dpad_left'], 'press_duration': 10},
+            {'hat': hats_dict['dpad_down'], 'press_duration': 10},
             {'hat': hats_dict['not-pressed'], 'press_duration': 10},
         ])
-
 
     lx = 128
     ly = 128
