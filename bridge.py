@@ -188,14 +188,22 @@ def example_macro():
     #     {'buttons': buttons_dict['not_pressed']},
     # ]
 
-    # let's just assume we're already on the right tool/menu
-    switch_controller_input_sequence = [
-        {'hat': hats_dict['dpad_right'], 'press_duration': 10},
-        {'hat': hats_dict['not-pressed'], 'press_duration': 10},
-        {'buttons': buttons_dict['not_pressed'], 'press_duration': 10},
-        {'buttons': buttons_dict['capture'], 'press_duration': 20},
-        {'buttons': buttons_dict['not_pressed'], 'press_duration': 10},
-    ]
+    hues = range(30)
+    vividities = range(15)
+    brightnesses = range(15)
+
+    switch_controller_input_sequence = []
+    # assume starting at the bottom left of h/v/b
+    for brightness in brightnesses:
+        print('extending for brightness')
+        print(brightness)
+        switch_controller_input_sequence.extend([
+            {'buttons': buttons_dict['not_pressed'], 'press_duration': 10},
+            {'buttons': buttons_dict['capture'], 'press_duration': 20},
+            {'buttons': buttons_dict['not_pressed'], 'press_duration': 10},
+            {'hat': hats_dict['dpad_right'], 'press_duration': 10},
+            {'hat': hats_dict['not-pressed'], 'press_duration': 10},
+        ])
 
     lx = 128
     ly = 128
