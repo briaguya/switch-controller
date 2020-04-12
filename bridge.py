@@ -149,35 +149,39 @@ def example_macro():
         'not_pressed': 0,
         'zr': 128,
         'capture': 8192,
-        'a': 4
+        'a': 4,
+        'x': 8,
+        'l': 16
     }
 
     hats_dict = {
+        'dpad_up': 0,
+        'dpad_right': 2,
         'blarg': 8
     }
 
     switch_controller_input_sequence = [
         {'buttons': buttons_dict['a']},
+        {'buttons': buttons_dict['not_pressed'], 'press_duration': 200},
+        {'buttons': buttons_dict['a']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'hat': hats_dict['dpad_up'], 'press_duration': 20},
         {'buttons': buttons_dict['not_pressed']},
         {'buttons': buttons_dict['a']},
         {'buttons': buttons_dict['not_pressed']},
-        # up dpad
+        {'buttons': buttons_dict['x']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'hat': hats_dict['dpad_up']},
+        {'buttons': buttons_dict['not_pressed']},
+        {'hat': hats_dict['dpad_right']},
         {'buttons': buttons_dict['not_pressed']},
         {'buttons': buttons_dict['a']},
         {'buttons': buttons_dict['not_pressed']},
-        # x for tool
+        {'buttons': buttons_dict['l']},
         {'buttons': buttons_dict['not_pressed']},
-        # up dpad
+        {'buttons': buttons_dict['l']},
         {'buttons': buttons_dict['not_pressed']},
-        # right dpad
-        {'buttons': buttons_dict['not_pressed']},
-        {'buttons': buttons_dict['a']},
-        {'buttons': buttons_dict['not_pressed']},
-        # L shoulder
-        {'buttons': buttons_dict['not_pressed']},
-        # L shoulder
-        {'buttons': buttons_dict['not_pressed']},
-        # L shoulder
+        {'buttons': buttons_dict['l']},
         {'buttons': buttons_dict['not_pressed']},
         {'buttons': buttons_dict['capture'], 'press_duration': 20},
         {'buttons': buttons_dict['not_pressed']},
@@ -196,6 +200,9 @@ def example_macro():
 
         if 'press_duration' in switch_controller_input:
             press_duration = switch_controller_input['press_duration']
+
+        if 'hat' in switch_controller_input:
+            hat = switch_controller_input['hat']
 
         rawbytes = struct.pack('>BHBBBB', hat, buttons, lx, ly, rx, ry)
         for blarg in range(press_duration):
