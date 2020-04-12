@@ -157,9 +157,27 @@ def example_macro():
     }
 
     switch_controller_input_sequence = [
-        {'buttons': buttons_dict['zr']},
+        {'buttons': buttons_dict['a']},
         {'buttons': buttons_dict['not_pressed']},
         {'buttons': buttons_dict['a']},
+        {'buttons': buttons_dict['not_pressed']},
+        # up dpad
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['a']},
+        {'buttons': buttons_dict['not_pressed']},
+        # x for tool
+        {'buttons': buttons_dict['not_pressed']},
+        # up dpad
+        {'buttons': buttons_dict['not_pressed']},
+        # right dpad
+        {'buttons': buttons_dict['not_pressed']},
+        {'buttons': buttons_dict['a']},
+        {'buttons': buttons_dict['not_pressed']},
+        # L shoulder
+        {'buttons': buttons_dict['not_pressed']},
+        # L shoulder
+        {'buttons': buttons_dict['not_pressed']},
+        # L shoulder
         {'buttons': buttons_dict['not_pressed']},
         {'buttons': buttons_dict['capture'], 'press_duration': 20},
         {'buttons': buttons_dict['not_pressed']},
