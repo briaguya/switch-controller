@@ -80,12 +80,14 @@ buttonmapping = [
     sdl2.SDL_CONTROLLER_BUTTON_RIGHTSHOULDER, # R
     sdl2.SDL_CONTROLLER_BUTTON_INVALID, # ZL
     sdl2.SDL_CONTROLLER_BUTTON_INVALID, # ZR
-    sdl2.SDL_CONTROLLER_BUTTON_BACK, # SELECT
+    # sdl2.SDL_CONTROLLER_BUTTON_BACK, # SELECT
+    sdl2.SDL_CONTROLLER_BUTTON_INVALID, # SELECT
     sdl2.SDL_CONTROLLER_BUTTON_START, # START
     sdl2.SDL_CONTROLLER_BUTTON_LEFTSTICK, # LCLICK
     sdl2.SDL_CONTROLLER_BUTTON_RIGHTSTICK, # RCLICK
     sdl2.SDL_CONTROLLER_BUTTON_GUIDE, # HOME
-    sdl2.SDL_CONTROLLER_BUTTON_INVALID, # CAPTURE
+    # sdl2.SDL_CONTROLLER_BUTTON_INVALID, # CAPTURE
+    sdl2.SDL_CONTROLLER_BUTTON_BACK, # CAPTURE
 ]
 
 axismapping = [
@@ -142,13 +144,31 @@ def replay_states(filename):
         print("Warning: replay file not found: {:s}".format(filename))
 
 def example_macro():
-    buttons = 0
-    hat = 8
+    # todo: figure out actual logic here because this is hacky af
+    buttons_dict = {
+        'zr': 128,
+        'capture': 8192
+    }
+
+    hats_dict = {
+        'blarg': 8
+    }
+
+    switch_controller_input_sequence = [
+        {'buttons': buttons_dict['zr']},
+        {'buttons': buttons_dict['capture']}
+    ]
+
+    
+    lx = 128
+    ly = 128
     rx = 128
     ry = 128
-    for i in range(240):
-        lx = int((1.0 + math.sin(2 * math.pi * i / 240)) * 127)
-        ly = int((1.0 + math.cos(2 * math.pi * i / 240)) * 127)
+    hat = 8
+    for switch_controller_input in switch_controller_input_sequence:
+        if 'buttons' in switch_controller_input:
+            buttons = switch_controller_input['buttons']
+
         rawbytes = struct.pack('>BHBBBB', hat, buttons, lx, ly, rx, ry)
         yield binascii.hexlify(rawbytes) + b'\n'
 
@@ -225,14 +245,15 @@ if __name__ == '__main__':
         enumerate_controllers()
         exit(0)
 
-    macros = {}
-
-    if args.load_macros is not None:
-        with open(args.load_macros) as f:
-            for line in f:
-                line = line.strip().split(maxsplit=2)
-                if len(line) == 2:
-                    macros[line[0]] = line[1]
+    macros = {
+        'c': example_macro()
+    }
+    # if args.load_macros is not None:
+    #     with open(args.load_macros) as f:
+    #         for line in f:
+    #             line = line.strip().split(maxsplit=2)
+    #             if len(line) == 2:
+    #                 macros[line[0]] = line[1]
 
     with KeyboardContext() as kb:
 
@@ -268,12 +289,14 @@ if __name__ == '__main__':
 
                         try:
                             c = chr(kb.getch())
+
                             if c in macros:
-                                input_stack.push(replay_states(macros[c]))
-                            elif c.lower() in macros:
-                                input_stack.macro_start(macros[c.lower()])
-                            elif c == ' ':
-                                input_stack.macro_end()
+                                input_stack.push(macros[c])
+                                # input_stack.push(replay_states(macros[c]))
+                            # elif c.lower() in macros:
+                            #     input_stack.macro_start(macros[c.lower()])
+                            # elif c == ' ':
+                            #     input_stack.macro_end()
                         except ValueError:
                             pass
 
