@@ -158,7 +158,8 @@ def example_macro():
         'dpad_up': 0,
         'dpad_right': 2,
         'not-pressed': 8,
-        'dpad_left': 6
+        'dpad_left': 6,
+        'dpad_down': 4
     }
 
     # todo: figure out opening it
@@ -196,8 +197,6 @@ def example_macro():
     switch_controller_input_sequence = []
     # assume starting at the bottom left of h/v/b
     for vividness in vividities:
-
-
         # since we're starting in the bottom left, loop brightness first
         for brightness in brightnesses:
             switch_controller_input_sequence.extend([
@@ -215,7 +214,7 @@ def example_macro():
                 {'hat': hats_dict['not-pressed'], 'press_duration': 10},
             ])
 
-        # hop up to vividness
+        # hop up to vividness, go to the next one, hop back down
         switch_controller_input_sequence.extend([
             {'hat': hats_dict['dpad_up'], 'press_duration': 10},
             {'hat': hats_dict['not-pressed'], 'press_duration': 10},
