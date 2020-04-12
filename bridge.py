@@ -195,19 +195,18 @@ def example_macro():
     brightnesses = range(15)
 
     switch_controller_input_sequence = []
-    # assume starting at the bottom left of h/v/b
-    for hue in hues:
 
+    # since we're starting in the bottom left, loop brightness first
+    for hue in hues:
         for vividness in vividities:
-            # since we're starting in the bottom left, loop brightness first
-            # for brightness in brightnesses:
-            #     switch_controller_input_sequence.extend([
-            #         {'buttons': buttons_dict['not_pressed'], 'press_duration': 10},
-            #         {'buttons': buttons_dict['capture'], 'press_duration': 20},
-            #         {'buttons': buttons_dict['not_pressed'], 'press_duration': 10},
-            #         {'hat': hats_dict['dpad_right'], 'press_duration': 10},
-            #         {'hat': hats_dict['not-pressed'], 'press_duration': 10},
-            #     ])
+            for brightness in brightnesses:
+                switch_controller_input_sequence.extend([
+                    {'buttons': buttons_dict['not_pressed'], 'press_duration': 10},
+                    {'buttons': buttons_dict['capture'], 'press_duration': 20},
+                    {'buttons': buttons_dict['not_pressed'], 'press_duration': 10},
+                    {'hat': hats_dict['dpad_right'], 'press_duration': 10},
+                    {'hat': hats_dict['not-pressed'], 'press_duration': 10},
+                ])
 
             # after looping through all brightnesses, bring the brightness cursor back to zero
             for brightness in brightnesses:
