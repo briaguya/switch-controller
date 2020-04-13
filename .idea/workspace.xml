@@ -20,6 +20,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b274bc2d-e7b4-45d7-956b-61d318e7a444" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bridge.py" beforeDir="false" afterPath="$PROJECT_DIR$/bridge.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -106,8 +107,8 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.bridge" />
       <item itemvalue="Python.bridge macro" />
+      <item itemvalue="Python.bridge" />
     </list>
   </component>
   <component name="SvnConfiguration">
@@ -133,6 +134,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
     <state x="513" y="232" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1586721432240">
