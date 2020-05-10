@@ -10,6 +10,7 @@ import struct
 import binascii
 import serial
 import math
+import os
 import time
 
 from tqdm import tqdm
@@ -133,13 +134,38 @@ def controller_states(controller_id):
         rawbytes = struct.pack('>BHBBBB', hat, buttons, *axis)
         yield binascii.hexlify(rawbytes) + b'\n'
 
-
-def replay_states(filename):
+def create_playback_file_from_ssctf(filename):
     try:
-        with open(filename, 'rb') as replay:
-            yield from replay.readlines()
+        with open(filename, 'r') as ssctf:
+            # the first line should be a header
+            header = ssctf.readline()
+            if header == 'ssctf 0.0.1\n':
+                # if we have this header, we can pretend we're good
+                blarg = ssctf.readlines()
+                x = 3
     except FileNotFoundError:
         print("Warning: replay file not found: {:s}".format(filename))
+
+    return "playbackfile"
+
+
+def replay_states(filename):
+    # by default just playback the file we got
+    playback_filename = filename
+
+    # but if we have a ssctf file
+    replay_extension = os.path.splitext(filename)[-1].lower()
+    if replay_extension == ".ssctf":
+        playback_filename = create_playback_file_from_ssctf(filename)
+
+    try:
+        with open(playback_filename, 'rb') as replay:
+            x = 3
+            # todo: read in ssctf files
+
+            yield from replay.readlines()
+    except FileNotFoundError:
+        print("Warning: replay file not found: {:s}".format(playback_filename))
 
 def example_macro():
     buttons = 0
@@ -246,6 +272,7 @@ if __name__ == '__main__':
                 next(live)
                 input_stack.push(live)
             if args.playback is not None:
+                x = 3
                 input_stack.push(replay_states(args.playback))
 
             with tqdm(unit=' updates', disable=args.quiet) as pbar:
