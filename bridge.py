@@ -122,7 +122,12 @@ def controller_states(controller_id):
         print('Using controller {:s} for input.'.format(controller_id))
 
     while True:
-        buttons = sum([sdl2.SDL_GameControllerGetButton(controller, b)<<n for n,b in enumerate(buttonmapping)])
+        for n, b in enumerate(buttonmapping):
+            blarg = sdl2.SDL_GameControllerGetButton(controller, b)<<n
+            x = 3
+
+
+        buttons = sum([sdl2.SDL_GameControllerGetButton(controller, b)<<n for n, b in enumerate(buttonmapping)])
         buttons |=  (abs(sdl2.SDL_GameControllerGetAxis(controller, sdl2.SDL_CONTROLLER_AXIS_TRIGGERLEFT)) > trigger_deadzone) << 6
         buttons |=  (abs(sdl2.SDL_GameControllerGetAxis(controller, sdl2.SDL_CONTROLLER_AXIS_TRIGGERRIGHT)) > trigger_deadzone) << 7
 
@@ -134,19 +139,76 @@ def controller_states(controller_id):
         rawbytes = struct.pack('>BHBBBB', hat, buttons, *axis)
         yield binascii.hexlify(rawbytes) + b'\n'
 
+
+ssctf_button_mapping = [
+    sdl2.SDL_CONTROLLER_BUTTON_X, # Y
+    sdl2.SDL_CONTROLLER_BUTTON_A, # B
+    sdl2.SDL_CONTROLLER_BUTTON_B, # A
+    sdl2.SDL_CONTROLLER_BUTTON_Y, # X
+    sdl2.SDL_CONTROLLER_BUTTON_LEFTSHOULDER, # L
+    sdl2.SDL_CONTROLLER_BUTTON_RIGHTSHOULDER, # R
+    sdl2.SDL_CONTROLLER_BUTTON_INVALID, # ZL
+    sdl2.SDL_CONTROLLER_BUTTON_INVALID, # ZR
+    sdl2.SDL_CONTROLLER_BUTTON_BACK, # SELECT
+    sdl2.SDL_CONTROLLER_BUTTON_START, # START
+    sdl2.SDL_CONTROLLER_BUTTON_LEFTSTICK, # LCLICK
+    sdl2.SDL_CONTROLLER_BUTTON_RIGHTSTICK, # RCLICK
+    sdl2.SDL_CONTROLLER_BUTTON_GUIDE, # HOME
+    sdl2.SDL_CONTROLLER_BUTTON_INVALID, # CAPTURE
+]
+
+
 def create_playback_file_from_ssctf(filename):
+    x = 3
     try:
-        with open(filename, 'r') as ssctf:
+        with open(filename, 'r') as ssctf_file:
             # the first line should be a header
-            header = ssctf.readline()
+            header = ssctf_file.readline()
             if header == 'ssctf 0.0.1\n':
                 # if we have this header, we can pretend we're good
-                blarg = ssctf.readlines()
-                x = 3
+
+                # get the total lines by reading the last line
+                # example last line:
+                # '6760 KEY_X;KEY_DRIGHT;KEY_B 0;0 0;0'
+
+                # make a dictionary of the ssctf line numbers to their button data
+                ssctf_lines = {}
+
+                for ssctf_file_line in ssctf_file:
+                    items = ssctf_file_line.split()
+                    key, values = int(items[0]), [items[1].split(';'), *items[2:]]
+                    ssctf_lines[key] = values
+                    total_lines = key
+
+                with open('playbackfile', 'wb') as playbackfile:
+                    # todo: get the total number of lines
+
+                    for line_number in range(total_lines):
+                        if line_number in ssctf_lines:
+                            ssctf_line = ssctf_lines[line_number]
+                        x = 3
+                        # for n, b in enumerate(ssctf_button_mapping):
+                        #
+                        #     blarg = 3
+                        #
+                        # # buttons = sum([sdl2.SDL_GameControllerGetButton(controller, b) << n for n, b in enumerate(buttonmapping)])
+                        #
+                        # buttons = 0
+                        # hat = 8
+                        # rx = 128
+                        # ry = 128
+                        # lx = int((1.0 + math.sin(2 * math.pi * i / 240)) * 127)
+                        # ly = int((1.0 + math.cos(2 * math.pi * i / 240)) * 127)
+                        # rawbytes = struct.pack('>BHBBBB', hat, buttons, lx, ly, rx, ry)
+                        # playbackfile.write(binascii.hexlify(rawbytes) + b'\n')
+
+                    x = 3
     except FileNotFoundError:
         print("Warning: replay file not found: {:s}".format(filename))
 
     return "playbackfile"
+
+
 
 
 def replay_states(filename):
@@ -156,13 +218,11 @@ def replay_states(filename):
     # but if we have a ssctf file
     replay_extension = os.path.splitext(filename)[-1].lower()
     if replay_extension == ".ssctf":
-        playback_filename = create_playback_file_from_ssctf(filename)
+        blarg = create_playback_file_from_ssctf(filename)
+        playback_filename = "recordedInput.txt"
 
     try:
         with open(playback_filename, 'rb') as replay:
-            x = 3
-            # todo: read in ssctf files
-
             yield from replay.readlines()
     except FileNotFoundError:
         print("Warning: replay file not found: {:s}".format(playback_filename))
