@@ -187,11 +187,7 @@ def create_playback_file_from_ssctf(filename):
                     total_lines = key
 
                 with open('playbackfile', 'wb') as playbackfile:
-                    recorded_rate = 60
-                    playback_rate = 120
-                    rate_ratio = playback_rate / recorded_rate
-
-                    for line_number in range(int(total_lines * rate_ratio)):
+                    for line_number in range(total_lines):
                         buttons = 0
                         hat = 8
                         rx = 128
@@ -199,10 +195,9 @@ def create_playback_file_from_ssctf(filename):
                         lx = 128
                         ly = 128
 
-                        ssctf_line_number = int(line_number / rate_ratio)
-                        if ssctf_line_number in ssctf_lines:
+                        if line_number in ssctf_lines:
                             # we have inputs for this line, get them
-                            ssctf_line = ssctf_lines[ssctf_line_number]
+                            ssctf_line = ssctf_lines[line_number]
                             ssctf_buttons = ssctf_line[0]
                             #
                             # for n, b in enumerate(ssctf_button_mapping):
@@ -350,38 +345,46 @@ if __name__ == '__main__':
 
             with tqdm(unit=' updates', disable=args.quiet) as pbar:
                 try:
+                    # let's see if we can wrap this in some timing
+                    startPlay = time.time()
+                    frame_count = 0
+                    fps = 60
 
                     while True:
 
-                        for event in sdl2.ext.get_events():
-                            # we have to fetch the events from SDL in order for the controller
-                            # state to be updated.
+                        # commenting this out so we don't look at the controller during playback
+                        # for event in sdl2.ext.get_events():
+                        #     # we have to fetch the events from SDL in order for the controller
+                        #     # state to be updated.
+                        #
+                        #     # example of running a macro when a joystick button is pressed:
+                        #     #if event.type == sdl2.SDL_JOYBUTTONDOWN:
+                        #     #    if event.jbutton.button == 1:
+                        #     #        input_stack.push(example_macro())
+                        #     # or play from file:
+                        #     #        input_stack.push(replay_states(filename))
+                        #
+                        #     pass
 
-                            # example of running a macro when a joystick button is pressed:
-                            #if event.type == sdl2.SDL_JOYBUTTONDOWN:
-                            #    if event.jbutton.button == 1:
-                            #        input_stack.push(example_macro())
-                            # or play from file:
-                            #        input_stack.push(replay_states(filename))
+                        # try:
+                        #     c = chr(kb.getch())
+                        #     if c in macros:
+                        #         input_stack.push(replay_states(macros[c]))
+                        #     elif c.lower() in macros:
+                        #         input_stack.macro_start(macros[c.lower()])
+                        #     elif c == ' ':
+                        #         input_stack.macro_end()
+                        # except ValueError:
+                        #     pass
 
-                            pass
-
-                        try:
-                            c = chr(kb.getch())
-                            if c in macros:
-                                input_stack.push(replay_states(macros[c]))
-                            elif c.lower() in macros:
-                                input_stack.macro_start(macros[c.lower()])
-                            elif c == ' ':
-                                input_stack.macro_end()
-                        except ValueError:
-                            pass
-
-                        try:
-                            message = next(input_stack)
-                            ser.write(message)
-                        except StopIteration:
-                            break
+                        nowPlay = time.time()
+                        if nowPlay - startPlay > frame_count / fps:
+                            try:
+                                message = next(input_stack)
+                                ser.write(message)
+                                frame_count += 1
+                            except StopIteration:
+                                break
 
                         # update speed meter on console.
                         pbar.set_description('Sent {:s}'.format(message[:-1].decode('utf8')))
