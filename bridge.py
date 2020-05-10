@@ -187,9 +187,11 @@ def create_playback_file_from_ssctf(filename):
                     total_lines = key
 
                 with open('playbackfile', 'wb') as playbackfile:
-                    # todo: get the total number of lines
+                    recorded_rate = 60
+                    playback_rate = 120
+                    rate_ratio = playback_rate / recorded_rate
 
-                    for line_number in range(total_lines):
+                    for line_number in range(int(total_lines * rate_ratio)):
                         buttons = 0
                         hat = 8
                         rx = 128
@@ -197,9 +199,10 @@ def create_playback_file_from_ssctf(filename):
                         lx = 128
                         ly = 128
 
-                        if line_number in ssctf_lines:
+                        ssctf_line_number = int(line_number / rate_ratio)
+                        if ssctf_line_number in ssctf_lines:
                             # we have inputs for this line, get them
-                            ssctf_line = ssctf_lines[line_number]
+                            ssctf_line = ssctf_lines[ssctf_line_number]
                             ssctf_buttons = ssctf_line[0]
                             #
                             # for n, b in enumerate(ssctf_button_mapping):

@@ -22,7 +22,8 @@
     <list default="true" id="b274bc2d-e7b4-45d7-956b-61d318e7a444" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bridge.py" beforeDir="false" afterPath="$PROJECT_DIR$/bridge.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/playbackfile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/playbackfile" beforeDir="false" afterPath="$PROJECT_DIR$/playbackfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/recordedInput.txt" beforeDir="false" afterPath="$PROJECT_DIR$/recordedInput.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,7 +44,7 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$/bridge.py" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
-  <component name="RunManager" selected="Python.bridge">
+  <component name="RunManager" selected="Python.bridge playback">
     <configuration default="true" type="PythonConfigurationType" factoryName="Python">
       <module name="switch-controller" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -99,7 +100,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/bridge.py" />
-      <option name="PARAMETERS" value="-p /dev/ttyACM0 -P recordedInput.txt" />
+      <option name="PARAMETERS" value="-p /dev/ttyACM0 -P B0B-YM2-MGF.txt" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="true" />
       <option name="MODULE_MODE" value="false" />
@@ -141,7 +142,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/bridge.py" />
-      <option name="PARAMETERS" value="-p /dev/ttyACM0 -R recordedInput.txt" />
+      <option name="PARAMETERS" value="-p /dev/ttyACM0 -R B0B-YM2-MGF.txt" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="true" />
       <option name="MODULE_MODE" value="false" />
@@ -204,15 +205,15 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="418" y="203" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1589095869558">
+    <state x="418" y="203" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1589100101903">
       <screen x="0" y="30" width="1920" height="995" />
     </state>
     <state x="418" y="213" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.30.1920.1050@0.30.1920.1050" timestamp="1586705522503" />
-    <state x="418" y="203" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.30.1920.995@0.30.1920.995" timestamp="1589095869558" />
-    <state x="693" y="275" width="524" height="508" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1589095731465">
+    <state x="418" y="203" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.30.1920.995@0.30.1920.995" timestamp="1589100101903" />
+    <state x="693" y="275" width="524" height="508" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1589096905204">
       <screen x="0" y="30" width="1920" height="995" />
     </state>
-    <state x="693" y="275" width="524" height="508" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.30.1920.995@0.30.1920.995" timestamp="1589095731465" />
+    <state x="693" y="275" width="524" height="508" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.30.1920.995@0.30.1920.995" timestamp="1589096905204" />
     <state width="1216" height="567" key="DebuggerActiveHint" timestamp="1589093785192">
       <screen x="0" y="30" width="1920" height="995" />
     </state>
@@ -221,46 +222,46 @@
       <screen x="0" y="30" width="1920" height="1050" />
     </state>
     <state x="743" y="313" width="424" height="487" key="FileChooserDialogImpl/0.30.1920.1050@0.30.1920.1050" timestamp="1586704052359" />
-    <state width="1895" height="316" key="GridCell.Tab.0.bottom" timestamp="1589095814615">
+    <state width="1895" height="256" key="GridCell.Tab.0.bottom" timestamp="1589100059264">
       <screen x="0" y="30" width="1920" height="995" />
     </state>
     <state width="1897" height="341" key="GridCell.Tab.0.bottom/0.30.1920.1050@0.30.1920.1050" timestamp="1586705030042" />
-    <state width="1895" height="316" key="GridCell.Tab.0.bottom/0.30.1920.995@0.30.1920.995" timestamp="1589095814615" />
-    <state width="1895" height="316" key="GridCell.Tab.0.center" timestamp="1589095814615">
+    <state width="1895" height="256" key="GridCell.Tab.0.bottom/0.30.1920.995@0.30.1920.995" timestamp="1589100059264" />
+    <state width="1895" height="256" key="GridCell.Tab.0.center" timestamp="1589100059264">
       <screen x="0" y="30" width="1920" height="995" />
     </state>
     <state width="1897" height="341" key="GridCell.Tab.0.center/0.30.1920.1050@0.30.1920.1050" timestamp="1586705030042" />
-    <state width="1895" height="316" key="GridCell.Tab.0.center/0.30.1920.995@0.30.1920.995" timestamp="1589095814615" />
-    <state width="1895" height="316" key="GridCell.Tab.0.left" timestamp="1589095814615">
+    <state width="1895" height="256" key="GridCell.Tab.0.center/0.30.1920.995@0.30.1920.995" timestamp="1589100059264" />
+    <state width="1895" height="256" key="GridCell.Tab.0.left" timestamp="1589100059263">
       <screen x="0" y="30" width="1920" height="995" />
     </state>
     <state width="1897" height="341" key="GridCell.Tab.0.left/0.30.1920.1050@0.30.1920.1050" timestamp="1586705030042" />
-    <state width="1895" height="316" key="GridCell.Tab.0.left/0.30.1920.995@0.30.1920.995" timestamp="1589095814615" />
-    <state width="1895" height="316" key="GridCell.Tab.0.right" timestamp="1589095814615">
+    <state width="1895" height="256" key="GridCell.Tab.0.left/0.30.1920.995@0.30.1920.995" timestamp="1589100059263" />
+    <state width="1895" height="256" key="GridCell.Tab.0.right" timestamp="1589100059264">
       <screen x="0" y="30" width="1920" height="995" />
     </state>
     <state width="1897" height="341" key="GridCell.Tab.0.right/0.30.1920.1050@0.30.1920.1050" timestamp="1586705030042" />
-    <state width="1895" height="316" key="GridCell.Tab.0.right/0.30.1920.995@0.30.1920.995" timestamp="1589095814615" />
-    <state width="1895" height="316" key="GridCell.Tab.1.bottom" timestamp="1589095814543">
+    <state width="1895" height="256" key="GridCell.Tab.0.right/0.30.1920.995@0.30.1920.995" timestamp="1589100059264" />
+    <state width="1895" height="316" key="GridCell.Tab.1.bottom" timestamp="1589099997677">
       <screen x="0" y="30" width="1920" height="995" />
     </state>
     <state width="1897" height="341" key="GridCell.Tab.1.bottom/0.30.1920.1050@0.30.1920.1050" timestamp="1586705029978" />
-    <state width="1895" height="316" key="GridCell.Tab.1.bottom/0.30.1920.995@0.30.1920.995" timestamp="1589095814543" />
-    <state width="1895" height="316" key="GridCell.Tab.1.center" timestamp="1589095814542">
+    <state width="1895" height="316" key="GridCell.Tab.1.bottom/0.30.1920.995@0.30.1920.995" timestamp="1589099997677" />
+    <state width="1895" height="316" key="GridCell.Tab.1.center" timestamp="1589099997677">
       <screen x="0" y="30" width="1920" height="995" />
     </state>
     <state width="1897" height="341" key="GridCell.Tab.1.center/0.30.1920.1050@0.30.1920.1050" timestamp="1586705029978" />
-    <state width="1895" height="316" key="GridCell.Tab.1.center/0.30.1920.995@0.30.1920.995" timestamp="1589095814542" />
-    <state width="1895" height="316" key="GridCell.Tab.1.left" timestamp="1589095814542">
+    <state width="1895" height="316" key="GridCell.Tab.1.center/0.30.1920.995@0.30.1920.995" timestamp="1589099997677" />
+    <state width="1895" height="316" key="GridCell.Tab.1.left" timestamp="1589099997677">
       <screen x="0" y="30" width="1920" height="995" />
     </state>
     <state width="1897" height="341" key="GridCell.Tab.1.left/0.30.1920.1050@0.30.1920.1050" timestamp="1586705029978" />
-    <state width="1895" height="316" key="GridCell.Tab.1.left/0.30.1920.995@0.30.1920.995" timestamp="1589095814542" />
-    <state width="1895" height="316" key="GridCell.Tab.1.right" timestamp="1589095814542">
+    <state width="1895" height="316" key="GridCell.Tab.1.left/0.30.1920.995@0.30.1920.995" timestamp="1589099997677" />
+    <state width="1895" height="316" key="GridCell.Tab.1.right" timestamp="1589099997677">
       <screen x="0" y="30" width="1920" height="995" />
     </state>
     <state width="1897" height="341" key="GridCell.Tab.1.right/0.30.1920.1050@0.30.1920.1050" timestamp="1586705029978" />
-    <state width="1895" height="316" key="GridCell.Tab.1.right/0.30.1920.995@0.30.1920.995" timestamp="1589095814542" />
+    <state width="1895" height="316" key="GridCell.Tab.1.right/0.30.1920.995@0.30.1920.995" timestamp="1589099997677" />
     <state x="834" y="309" width="992" height="733" key="SettingsEditor" timestamp="1586704650761">
       <screen x="0" y="30" width="1920" height="1050" />
     </state>
@@ -275,18 +276,8 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/bridge.py</url>
-          <line>293</line>
-          <option name="timeStamp" value="8" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/bridge.py</url>
-          <line>229</line>
-          <option name="timeStamp" value="28" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/bridge.py</url>
-          <line>234</line>
-          <option name="timeStamp" value="31" />
+          <line>386</line>
+          <option name="timeStamp" value="33" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
