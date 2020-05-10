@@ -142,21 +142,27 @@ def controller_states(controller_id):
 
 ssctf_button_mapping = [
     'KEY_Y', # Y
-    sdl2.SDL_CONTROLLER_BUTTON_A, # B
-    sdl2.SDL_CONTROLLER_BUTTON_B, # A
-    sdl2.SDL_CONTROLLER_BUTTON_Y, # X
-    sdl2.SDL_CONTROLLER_BUTTON_LEFTSHOULDER, # L
-    sdl2.SDL_CONTROLLER_BUTTON_RIGHTSHOULDER, # R
-    sdl2.SDL_CONTROLLER_BUTTON_INVALID, # ZL
-    sdl2.SDL_CONTROLLER_BUTTON_INVALID, # ZR
-    sdl2.SDL_CONTROLLER_BUTTON_BACK, # SELECT
-    sdl2.SDL_CONTROLLER_BUTTON_START, # START
-    sdl2.SDL_CONTROLLER_BUTTON_LEFTSTICK, # LCLICK
-    sdl2.SDL_CONTROLLER_BUTTON_RIGHTSTICK, # RCLICK
-    sdl2.SDL_CONTROLLER_BUTTON_GUIDE, # HOME
-    sdl2.SDL_CONTROLLER_BUTTON_INVALID, # CAPTURE
+    'KEY_B', # B
+    'KEY_A', # A
+    'KEY_X', # X
+    '?', # L
+    '?', # R
+    '?', # ZL
+    '?', # ZR
+    '?', # SELECT
+    '?', # START
+    '?', # LCLICK
+    '?', # RCLICK
+    '?', # HOME
+    '?', # CAPTURE
 ]
 
+ssctf_hatmapping = [
+    'KEY_DUP', # UP
+    'KEY_DRIGHT', # RIGHT
+    'KEY_DDOWN', # DOWN
+    'KEY_DLEFT', # LEFT
+]
 
 def create_playback_file_from_ssctf(filename):
     x = 3
@@ -195,14 +201,15 @@ def create_playback_file_from_ssctf(filename):
                             # we have inputs for this line, get them
                             ssctf_line = ssctf_lines[line_number]
                             ssctf_buttons = ssctf_line[0]
-
-                            for n, b in enumerate(ssctf_button_mapping):
-                                if b in ssctf_buttons:
-                                    x = 3
-
-                                blarg = 3
                             #
-                            buttons = sum([b in ssctf_buttons << n for n, b in enumerate(ssctf_button_mapping)])
+                            # for n, b in enumerate(ssctf_button_mapping):
+                            #     if b in ssctf_buttons:
+                            #         x = 3
+                            #
+                            #     blarg = 3
+                            # #
+                            buttons = sum([(b in ssctf_buttons) << n for n, b in enumerate(ssctf_button_mapping)])
+                            hat = hatcodes[sum([(b in ssctf_buttons) << n for n, b in enumerate(ssctf_hatmapping)])]
 
                         rawbytes = struct.pack('>BHBBBB', hat, buttons, lx, ly, rx, ry)
                         playbackfile.write(binascii.hexlify(rawbytes) + b'\n')
@@ -222,8 +229,7 @@ def replay_states(filename):
     # but if we have a ssctf file
     replay_extension = os.path.splitext(filename)[-1].lower()
     if replay_extension == ".ssctf":
-        blarg = create_playback_file_from_ssctf(filename)
-        playback_filename = "recordedInput.txt"
+        playback_filename = create_playback_file_from_ssctf(filename)
 
     try:
         with open(playback_filename, 'rb') as replay:
