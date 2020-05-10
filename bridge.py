@@ -141,7 +141,7 @@ def controller_states(controller_id):
 
 
 ssctf_button_mapping = [
-    sdl2.SDL_CONTROLLER_BUTTON_X, # Y
+    'KEY_Y', # Y
     sdl2.SDL_CONTROLLER_BUTTON_A, # B
     sdl2.SDL_CONTROLLER_BUTTON_B, # A
     sdl2.SDL_CONTROLLER_BUTTON_Y, # X
@@ -184,25 +184,29 @@ def create_playback_file_from_ssctf(filename):
                     # todo: get the total number of lines
 
                     for line_number in range(total_lines):
-                        if line_number in ssctf_lines:
-                            ssctf_line = ssctf_lines[line_number]
-                        x = 3
-                        # for n, b in enumerate(ssctf_button_mapping):
-                        #
-                        #     blarg = 3
-                        #
-                        # # buttons = sum([sdl2.SDL_GameControllerGetButton(controller, b) << n for n, b in enumerate(buttonmapping)])
-                        #
-                        # buttons = 0
-                        # hat = 8
-                        # rx = 128
-                        # ry = 128
-                        # lx = int((1.0 + math.sin(2 * math.pi * i / 240)) * 127)
-                        # ly = int((1.0 + math.cos(2 * math.pi * i / 240)) * 127)
-                        # rawbytes = struct.pack('>BHBBBB', hat, buttons, lx, ly, rx, ry)
-                        # playbackfile.write(binascii.hexlify(rawbytes) + b'\n')
+                        buttons = 0
+                        hat = 8
+                        rx = 128
+                        ry = 128
+                        lx = 128
+                        ly = 128
 
-                    x = 3
+                        if line_number in ssctf_lines:
+                            # we have inputs for this line, get them
+                            ssctf_line = ssctf_lines[line_number]
+                            ssctf_buttons = ssctf_line[0]
+
+                            for n, b in enumerate(ssctf_button_mapping):
+                                if b in ssctf_buttons:
+                                    x = 3
+
+                                blarg = 3
+                            #
+                            buttons = sum([b in ssctf_buttons << n for n, b in enumerate(ssctf_button_mapping)])
+
+                        rawbytes = struct.pack('>BHBBBB', hat, buttons, lx, ly, rx, ry)
+                        playbackfile.write(binascii.hexlify(rawbytes) + b'\n')
+
     except FileNotFoundError:
         print("Warning: replay file not found: {:s}".format(filename))
 
